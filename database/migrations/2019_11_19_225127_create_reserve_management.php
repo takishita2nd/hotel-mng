@@ -14,22 +14,22 @@ class CreateReserveManagement extends Migration
     public function up()
     {
         Schema::create('reserve_managements', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->string('address');
-            $table->string('phone');
-            $table->integer('days');
-            $table->date('start_day');
-            $table->timestamps();
+            $table->increments('id');                   // ID
+            $table->string('name');                     // 名前
+            $table->string('address');                  // 住所
+            $table->string('phone');                    // 電話番号
+            $table->integer('days');                    // 宿泊日数
+            $table->date('start_day');                  // 宿泊初日
+            $table->timestamps();                       // タイムスタンプ
             $table->engine = 'InnoDB';
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';
         });
 
         Schema::create('reserve_day_lists', function (Blueprint $table) {
-            $table->increments('id');
-            $table->date('day');
-            $table->timestamps();
+            $table->increments('id');                   // ID
+            $table->date('day');                        // 宿泊日
+            $table->timestamps();                       // タイムスタンプ
             $table->engine = 'InnoDB';
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';
