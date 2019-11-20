@@ -10,7 +10,7 @@ class reserve_day_lists_reserve_managements extends Model
 
     public function hasManagement()
     {
-        return $this->hasMany('App\Model\reserve_management', 'id', 'reserve_managements_id');
+        return $this->hasMany('App\Model\ReserveManagement', 'id', 'reserve_managements_id');
     }
 
     public function hasDayList()

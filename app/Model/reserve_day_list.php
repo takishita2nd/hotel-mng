@@ -8,7 +8,7 @@ class reserve_day_list extends Model
 {
     protected $table = 'reserve_day_lists';
 
-    public function belongsTo()
+    public function belongsToTable()
     {
         return $this->belongsTo('App\Model\reserve_day_lists_reserve_managements', 'id', 'reserve_day_lists_id');
     }
