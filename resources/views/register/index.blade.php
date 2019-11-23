@@ -9,9 +9,26 @@
 
                 <div class="panel-body">
                     <table>
+                        <tr>
+                            <th>名前</th>
+                            <th>住所</th>
+                            <th>電話番号</th>
+                            <th>人数</th>
+                            <th>宿泊日</th>
+                            <th>宿泊日数</th>
+                            <th>編集</th>
+                            <th>削除</th>
+                        </tr>
                     @foreach ($registerLists as $list)
                         <tr>
-                            <td>これは {{ $list->name }} ユーザーです。</td>
+                            <td>{{ $list->name }}</td>
+                            <td>{{ $list->address }}</td>
+                            <td>{{ $list->phone }}</td>
+                            <td>{{ $list->num }}</td>
+                            <td>{{ $list->days }}</td>
+                            <td>{{ $list->start_day }}</td>
+                            <td>{{ Html::link('/management/'.$list->id.'/edit', '編集') }}</td>
+                            <td>削除</td>
                         </tr>
                     @endforeach
                     </table>
