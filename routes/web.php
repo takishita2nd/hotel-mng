@@ -19,3 +19,5 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/management', 'RegisterManagementController@index');
+Route::get('/management/create', 'RegisterManagementController@create');
+Route::post('/management', 'RegisterManagementController@store');

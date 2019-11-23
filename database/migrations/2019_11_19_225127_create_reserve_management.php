@@ -18,6 +18,7 @@ class CreateReserveManagement extends Migration
             $table->string('name');                     // 名前
             $table->string('address');                  // 住所
             $table->string('phone');                    // 電話番号
+            $table->integer('num');                     // 人数
             $table->integer('days');                    // 宿泊日数
             $table->date('start_day');                  // 宿泊初日
             $table->timestamps();                       // タイムスタンプ
