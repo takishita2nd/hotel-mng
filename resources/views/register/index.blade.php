@@ -28,10 +28,11 @@
                             <td>{{ $list->days }}</td>
                             <td>{{ $list->start_day }}</td>
                             <td>{{ Html::link('/management/'.$list->id.'/edit', '編集') }}</td>
-                            <td>削除</td>
+                            <td>{{ Html::link('/management/'.$list->id.'/conform', '削除') }}</td>
                         </tr>
                     @endforeach
                     </table>
+                    {{ Html::Link('/management/create', '追加') }}
                 </div>
             </div>
         </div>

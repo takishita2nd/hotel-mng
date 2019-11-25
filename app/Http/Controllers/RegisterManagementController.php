@@ -32,6 +32,8 @@ class RegisterManagementController extends Controller
 
     /**
      * 入力フォーム
+     *
+     * @return \Illuminate\Http\Response
      */
     public function create()
     {
@@ -57,6 +59,8 @@ class RegisterManagementController extends Controller
 
     /**
      * 編集処理
+     *
+     * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
@@ -78,6 +82,25 @@ class RegisterManagementController extends Controller
             $param[4] => $request->days,
             $param[5] => $request->start_day
         ]);
+        return redirect('management');
+    }
+
+    /**
+     * 削除確認
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function conform($id)
+    {
+        return view('register.conform', ['item' => $this->registerManagement->getItemById($id)]);
+    }
+
+    /**
+     * 削除処理
+     */
+    public function delete(Request $request)
+    {
+        $this->registerManagement->deleteById($request->id);
         return redirect('management');
     }
 }
