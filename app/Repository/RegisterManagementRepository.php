@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Model\ReserveManagement;
+use App\Model\ReserveDayList;
 
 class RegisterManagementRepository
 {
@@ -31,6 +32,17 @@ class RegisterManagementRepository
             $model->$name = $param[$name];
         }
         $model->save();
+        $model2 = new ReserveDayList();
+        $model2->day = $model->start_day;
+        $model2->save();
+        $model->reserveDayLists()->attach($model2);
+        for($i = 1; $i < $model->days; $i++)
+        {
+            $model2 = new ReserveDayList();
+            $model2->day = date('Y-m-d', strtotime($model->start_day.'+'.$i.' day'));
+            $model2->save();
+            $model->reserveDayLists()->attach($model2);
+        }
     }
 
     /**
@@ -66,6 +78,12 @@ class RegisterManagementRepository
     public function deleteById($id)
     {
         $model = $this->getItemById($id);
+        $model2s = $model->reserveDayLists()->get();
+        $model->reserveDayLists()->detach();
+        foreach($model2s as $model2)
+        {
+            $model2->delete();
+        }
         $model->delete();
     }
 

@@ -36,14 +36,14 @@ class CreateReserveManagement extends Migration
             $table->collation = 'utf8mb4_unicode_ci';
         });
 
-        Schema::create('reserve_day_lists_reserve_managements', function (Blueprint $table) {
+        Schema::create('reserve_day_list_reserve_management', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('reserve_managements_id')
-                  ->foreign('reserve_managements_id')
+            $table->integer('reserve_management_id')
+                  ->foreign('reserve_management_id')
                   ->references('id')->on('reserve_managements')
                   ->onDelete('cascade');
-            $table->integer('reserve_day_lists_id')
-                  ->foreign('reserve_day_lists_id')
+            $table->integer('reserve_day_list_id')
+                  ->foreign('reserve_day_list_id')
                   ->references('id')->on('reserve_day_lists')
                   ->onDelete('cascade');
             $table->timestamps();
@@ -60,7 +60,7 @@ class CreateReserveManagement extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('reserve_day_lists_reserve_managements');
+        Schema::dropIfExists('reserve_day_list_reserve_management');
         Schema::dropIfExists('reserve_day_lists');
         Schema::dropIfExists('reserve_managements');
     }

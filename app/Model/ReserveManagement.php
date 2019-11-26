@@ -8,8 +8,8 @@ class ReserveManagement extends Model
 {
     protected $table = 'reserve_managements';
 
-    public function belongsToTable()
+    public function reserveDayLists()
     {
-        return $this->belongsTo('App\Model\reserve_day_lists_reserve_managements', 'id', 'reserve_managements_id');
+        return $this->belongsToMany('App\Model\ReserveDayList');
     }
 }
