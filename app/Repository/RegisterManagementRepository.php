@@ -87,6 +87,22 @@ class RegisterManagementRepository
         $model->delete();
     }
 
+    /**
+     * スケジュール一覧を取得する
+     */
+    public function getSchedule()
+    {
+        $lists = array();
+        $index = 0;
+        $models = ReserveDayList::get();
+        foreach($models as $model)
+        {
+            $lists[$index] = array('day' => $model->day, 'name' => $model->reserveManagements()->first()->name);
+            $index++;
+        }
+        return $lists;
+    }
+
     public function getParam()
     {
         return $this->paramNames;

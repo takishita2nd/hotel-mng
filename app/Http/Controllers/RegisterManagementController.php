@@ -103,4 +103,12 @@ class RegisterManagementController extends Controller
         $this->registerManagement->deleteById($request->id);
         return redirect('management');
     }
+
+    /**
+     * スケジュール表示
+     */
+    public function schedule()
+    {
+        return view('register.schedule', ['Lists' => $this->registerManagement->getSchedule()]);
+    }
 }

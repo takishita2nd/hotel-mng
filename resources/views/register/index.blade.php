@@ -34,6 +34,7 @@
                     </table>
                     {{ Html::Link('/management/create', '追加') }}
                 </div>
+                <div>{{ Html::link('/management/schedule', 'スケジュール') }}</div>
             </div>
         </div>
     </div>

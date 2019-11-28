@@ -25,3 +25,4 @@ Route::get('/management/{id}/edit', 'RegisterManagementController@edit');
 Route::post('/management/update', 'RegisterManagementController@update');
 Route::get('/management/{id}/conform', 'RegisterManagementController@conform');
 Route::post('/management/delete', 'RegisterManagementController@delete');
+Route::get('/management/schedule', 'RegisterManagementController@schedule');
