@@ -10,35 +10,36 @@
                 <div class="panel-body">
                 {!! Form::open(['url' => action('RegisterManagementController@delete')]) !!}
                 {!! Form::hidden('id', $item->id) !!}
-                <table>
+                <table class="edit">
                     <tr>
-                        <td>名前</td>
+                        <th>名前</th>
                         <td>{!! $item->name !!}</td>
                     </tr>
                     <tr>
-                        <td>住所</td>
+                        <th>住所</th>
                         <td>{!! $item->address !!}</td>
                     </tr>
                     <tr>
-                        <td>電話番号</td>
+                        <th>電話番号</th>
                         <td>{!! $item->phone !!}</td>
                     </tr>
                     <tr>
-                        <td>人数</td>
+                        <th>人数</th>
                         <td>{!! $item->num !!}</td>
                     </tr>
                     <tr>
-                        <td>宿泊日数</td>
+                        <th>宿泊日数</th>
                         <td>{!! $item->days !!}</td>
                     </tr>
                     <tr>
-                        <td>宿泊日</td>
+                        <th>宿泊日</th>
                         <td>{!! $item->start_day !!}</td>
                     </tr>
                 </table>
                 {!! Form::submit('削除') !!}
                 {!! Form::close() !!}
                 </div>
+                <div>{{ Html::link('/management', '戻る', ['class' => 'btn']) }}</div>
             </div>
         </div>
     </div>

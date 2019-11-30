@@ -8,33 +8,33 @@
                 <div class="panel-heading">予約一覧</div>
 
                 <div class="panel-body">
-                    <table>
+                    <table class="management">
                         <tr>
-                            <th>名前</th>
-                            <th>住所</th>
-                            <th>電話番号</th>
-                            <th>人数</th>
-                            <th>宿泊日</th>
-                            <th>宿泊日数</th>
-                            <th>編集</th>
-                            <th>削除</th>
+                            <th class="name">名前</th>
+                            <th class="address">住所</th>
+                            <th class="phone">電話番号</th>
+                            <th class="num">人数</th>
+                            <th class="date">宿泊日</th>
+                            <th class="num">宿泊日数</th>
+                            <th class="command">編集</th>
+                            <th class="command">削除</th>
                         </tr>
                     @foreach ($registerLists as $list)
                         <tr>
-                            <td>{{ $list->name }}</td>
-                            <td>{{ $list->address }}</td>
-                            <td>{{ $list->phone }}</td>
-                            <td>{{ $list->num }}</td>
-                            <td>{{ $list->days }}</td>
-                            <td>{{ $list->start_day }}</td>
-                            <td>{{ Html::link('/management/'.$list->id.'/edit', '編集') }}</td>
-                            <td>{{ Html::link('/management/'.$list->id.'/conform', '削除') }}</td>
+                            <td class="name">{{ $list->name }}</td>
+                            <td class="address">{{ $list->address }}</td>
+                            <td class="phone">{{ $list->phone }}</td>
+                            <td class="num">{{ $list->num }}</td>
+                            <td class="date">{{ $list->start_day }}</td>
+                            <td class="num">{{ $list->days }}</td>
+                            <td class="command">{{ Html::link('/management/'.$list->id.'/edit', '編集') }}</td>
+                            <td class="command">{{ Html::link('/management/'.$list->id.'/conform', '削除') }}</td>
                         </tr>
                     @endforeach
                     </table>
-                    {{ Html::Link('/management/create', '追加') }}
+                    {{ Html::Link('/management/create', '追加', ['class' => 'btn']) }}
                 </div>
-                <div>{{ Html::link('/management/schedule', 'スケジュール') }}</div>
+                <div>{{ Html::link('/management/schedule', 'スケジュール', ['class' => 'btn']) }}</div>
             </div>
         </div>
     </div>

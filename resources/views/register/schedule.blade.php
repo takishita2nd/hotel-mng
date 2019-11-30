@@ -8,7 +8,7 @@
                 <div class="panel-heading">スケジュール</div>
 
                 <div class="panel-body">
-                    <table>
+                    <table class="schedule">
                         <tr>
                             <th>日時</th>
                             <th>名前</th>
@@ -21,6 +21,7 @@
                     @endforeach
                     </table>
                 </div>
+                <div>{{ Html::link('/management', '戻る', ['class' => 'btn']) }}</div>
             </div>
         </div>
     </div>

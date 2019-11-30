@@ -9,35 +9,36 @@
 
                 <div class="panel-body">
                 {!! Form::open(['url' => action('RegisterManagementController@store')]) !!}
-                <table>
+                <table class="edit">
                     <tr>
-                        <td>名前</td>
+                        <th>名前</th>
                         <td>{!! Form::text('name') !!}</td>
                     </tr>
                     <tr>
-                        <td>住所</td>
+                        <th>住所</th>
                         <td>{!! Form::text('address') !!}</td>
                     </tr>
                     <tr>
-                        <td>電話番号</td>
-                        <td>{!! Form::number('phone') !!}</td>
+                        <th>電話番号</th>
+                        <td>{!! Form::text('phone') !!}</td>
                     </tr>
                     <tr>
-                        <td>人数</td>
+                        <th>人数</th>
                         <td>{!! Form::select('num', ['1' => 1, '2' => 2]) !!}</td>
                     </tr>
                     <tr>
-                        <td>宿泊日数</td>
+                        <th>宿泊日数</th>
                         <td>{!! Form::select('days', ['1' => 1, '2' => 2, '3' => 3, '4' => 4]) !!}</td>
                     </tr>
                     <tr>
-                        <td>宿泊日</td>
+                        <th>宿泊日</th>
                         <td>{!! Form::date('start_day', \Carbon\Carbon::now()) !!}</td>
                     </tr>
                 </table>
                 {!! Form::submit('登録') !!}
                 {!! Form::close() !!}
                 </div>
+                <div>{{ Html::link('/management', '戻る', ['class' => 'btn']) }}</div>
             </div>
         </div>
     </div>

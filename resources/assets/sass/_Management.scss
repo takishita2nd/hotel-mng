@@ -1,0 +1,79 @@
+table.management {
+    width: 100%;
+    tbody tr{
+        th {
+            border: solid;
+            border-width: thin;
+        }
+        .name{
+            width: 15%;
+        }
+        .address{
+            width: 20%;
+        }
+        .phone{
+            width: 15%;
+        }
+        .num{
+            width: 10%;
+        }
+        .date{
+            width: 10%;
+        }
+        .command{
+            width: 5%;
+        }
+        td {
+            border: solid;
+            border-width: thin;
+        }
+        .name{
+            width: 15%;
+        }
+        .address{
+            width: 20%;
+        }
+        .phone{
+            width: 15%;
+        }
+        .num{
+            width: 10%;
+        }
+        .date{
+            width: 10%;
+        }
+        .command{
+            width: 5%;
+        }
+    }
+}
+table.edit{
+    width: 50%;
+    tbody tr{
+        th {
+            width: 30%;
+            border: solid;
+            border-width: thin;
+        }
+        td {
+            width: 70%;
+            border: solid;
+            border-width: thin;
+        }
+    }
+}
+table.schedule{
+    width: 50%;
+    tbody tr{
+        th {
+            width: 50%;
+            border: solid;
+            border-width: thin;
+        }
+        td {
+            width: 50%;
+            border: solid;
+            border-width: thin;
+        }
+    }
+}
