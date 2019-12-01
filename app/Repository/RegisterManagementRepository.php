@@ -32,27 +32,7 @@ class RegisterManagementRepository
             $model->$name = $param[$name];
         }
         $model->save();
-        $model2 = new ReserveDayList();
-        $model2->day = $model->start_day;
-        $model2->save();
-        $model->reserveDayLists()->attach($model2);
-        for($i = 1; $i < $model->days; $i++)
-        {
-            $model2 = new ReserveDayList();
-            $model2->day = date('Y-m-d', strtotime($model->start_day.'+'.$i.' day'));
-            $model2->save();
-            $model->reserveDayLists()->attach($model2);
-        }
-    }
-
-    /**
-     * IDから予約を１件取得する
-     * 
-     * @return ReserveManagement
-     */
-    public function getItemById($id)
-    {
-        return ReserveManagement::where(['id' => $id])->first();
+        $this->attachToSchedule($model);
     }
 
     /**
@@ -68,6 +48,8 @@ class RegisterManagementRepository
             $model->$name = $param[$name];
         }
         $model->save();
+        $this->detachToSchedule($model);
+        $this->attachToSchedule($model);
     }
 
     /**
@@ -78,12 +60,7 @@ class RegisterManagementRepository
     public function deleteById($id)
     {
         $model = $this->getItemById($id);
-        $model2s = $model->reserveDayLists()->get();
-        $model->reserveDayLists()->detach();
-        foreach($model2s as $model2)
-        {
-            $model2->delete();
-        }
+        $this->detachToSchedule($model);
         $model->delete();
     }
 
@@ -101,6 +78,51 @@ class RegisterManagementRepository
             $index++;
         }
         return $lists;
+    }
+
+    /**
+     * IDから予約を１件取得する
+     * 
+     * @return ReserveManagement
+     */
+    public function getItemById($id)
+    {
+        return ReserveManagement::where(['id' => $id])->first();
+    }
+
+    /**
+     * 日付から予約を１件取得する
+     * 
+     * @return ReserveDayList
+     */
+    public function getItemByDate($date)
+    {
+        return ReserveDayList::where(['day' => $date])->first();
+    }
+
+    public function attachToSchedule($model)
+    {
+        $model2 = new ReserveDayList();
+        $model2->day = $model->start_day;
+        $model2->save();
+        $model->reserveDayLists()->attach($model2);
+        for($i = 1; $i < $model->days; $i++)
+        {
+            $model2 = new ReserveDayList();
+            $model2->day = date('Y-m-d', strtotime($model->start_day.'+'.$i.' day'));
+            $model2->save();
+            $model->reserveDayLists()->attach($model2);
+        }
+    }
+
+    public function detachToSchedule($model)
+    {
+        $model2s = $model->reserveDayLists()->get();
+        $model->reserveDayLists()->detach();
+        foreach($model2s as $model2)
+        {
+            $model2->delete();
+        }
     }
 
     public function getParam()

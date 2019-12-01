@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Repository\RegisterManagementRepository;
+use App\Http\Requests\ManagementRequest;
 
 class RegisterManagementController extends Controller
 {
@@ -43,7 +44,7 @@ class RegisterManagementController extends Controller
     /**
      * 登録処理
      */
-    public function store(Request $request)
+    public function store(ManagementRequest $request)
     {
         $param = $this->registerManagement->getParam();
         $this->registerManagement->add([
@@ -70,7 +71,7 @@ class RegisterManagementController extends Controller
     /**
      * 更新処理
      */
-    public function update(Request $request)
+    public function update(ManagementRequest $request)
     {
         $param = $this->registerManagement->getParam();
         $this->registerManagement->updateById($request->id,
