@@ -100,6 +100,28 @@ class RegisterManagementRepository
         return ReserveDayList::where(['day' => $date])->first();
     }
 
+    /**
+     * スケジュールの重複を確認する
+     * 
+     * @return boolean
+     */
+    public function checkSchedule($date, $num)
+    {
+        if(ReserveDayList::where(['day' => $date])->count() != 0)
+        {
+            return false;
+        }
+        for($i = 1; $i < $num; $i++)
+        {
+            if(ReserveDayList::where(['day' => date('Y-m-d', strtotime($date.'+'.$i.' day'))])->count() != 0)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public function attachToSchedule($model)
     {
         $model2 = new ReserveDayList();

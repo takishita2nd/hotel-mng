@@ -46,6 +46,12 @@ class RegisterManagementController extends Controller
      */
     public function store(ManagementRequest $request)
     {
+        if($this->registerManagement->checkSchedule($request->start_day, $request->days) == false)
+        {
+            return redirect('management/create')
+                        ->with(['error' => 'スケジュールが重複します'])
+                        ->withInput();
+        }
         $param = $this->registerManagement->getParam();
         $this->registerManagement->add([
             $param[0] => $request->name,
@@ -73,6 +79,12 @@ class RegisterManagementController extends Controller
      */
     public function update(ManagementRequest $request)
     {
+        if($this->registerManagement->checkSchedule() == false)
+        {
+            return redirect('management/create')
+                        ->with(['error' => 'スケジュールが重複します'])
+                        ->withInput();
+        }
         $param = $this->registerManagement->getParam();
         $this->registerManagement->updateById($request->id,
         [
