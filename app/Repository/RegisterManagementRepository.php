@@ -20,6 +20,18 @@ class RegisterManagementRepository
     }
 
     /**
+     * 月別予約一覧を取得する
+     * 
+     * @return ReserveManagement[]
+     */
+    public function getListByMonth($year, $month)
+    {
+        return ReserveManagement::where('start_day', '>=', date('Y-m-d', strtotime('first day of '.$year.'-'.$month)))
+                                ->where('start_day', '<=', date('Y-m-d', strtotime('last day of '.$year.'-'.$month)))
+                                ->get();
+    }
+
+    /**
      * 予約を登録する
      * 
      * @return void
@@ -72,6 +84,24 @@ class RegisterManagementRepository
         $lists = array();
         $index = 0;
         $models = ReserveDayList::get();
+        foreach($models as $model)
+        {
+            $lists[$index] = array('day' => $model->day, 'name' => $model->reserveManagements()->first()->name);
+            $index++;
+        }
+        return $lists;
+    }
+
+    /**
+     * 月別スケジュール一覧を取得する
+     */
+    public function getScheduleByMonth($year, $month)
+    {
+        $lists = array();
+        $index = 0;
+        $models = ReserveDayList::where('day', '>=', date('Y-m-d', strtotime('first day of '.$year.'-'.$month)))
+                                ->where('day', '<=', date('Y-m-d', strtotime('last day of '.$year.'-'.$month)))
+                                ->get();
         foreach($models as $model)
         {
             $lists[$index] = array('day' => $model->day, 'name' => $model->reserveManagements()->first()->name);

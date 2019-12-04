@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Repository\RegisterManagementRepository;
 use App\Http\Requests\ManagementRequest;
 
@@ -26,9 +27,28 @@ class RegisterManagementController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('register.index', ['registerLists' => $this->registerManagement->getList()]);
+        if(is_null($request->input('year')) || is_null($request->input('month')))
+        {
+            return view('register.index', ['registerLists' => $this->registerManagement->getList()]);
+        }
+        else
+        {
+            return view('register.index', 
+                ['registerLists' => $this->registerManagement->getListByMonth($request->input('year'), $request->input('month'))]
+            );
+        }
+    }
+
+    /**
+     * indexの月別表示
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function indexToMonthly(Request $request)
+    {
+        return redirect('management?year='.$request->year.'&month='.$request->month);
     }
 
     /**
@@ -120,8 +140,27 @@ class RegisterManagementController extends Controller
     /**
      * スケジュール表示
      */
-    public function schedule()
+    public function schedule(Request $request)
     {
-        return view('register.schedule', ['Lists' => $this->registerManagement->getSchedule()]);
+        if(is_null($request->input('year')) || is_null($request->input('month')))
+        {
+            return view('register.schedule', ['Lists' => $this->registerManagement->getSchedule()]);
+        }
+        else
+        {
+            return view('register.schedule', 
+                ['Lists' => $this->registerManagement->getScheduleByMonth($request->input('year'), $request->input('month'))]
+            );
+        }
+    }
+
+    /**
+     * スケジュール表示の月別表示
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function scheduleToMonthly(Request $request)
+    {
+        return redirect('management/schedule?year='.$request->year.'&month='.$request->month);
     }
 }

@@ -19,6 +19,7 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/management', 'RegisterManagementController@index');
+Route::post('/management/indexToMonthly', 'RegisterManagementController@indexToMonthly');
 Route::get('/management/create', 'RegisterManagementController@create');
 Route::post('/management', 'RegisterManagementController@store');
 Route::get('/management/{id}/edit', 'RegisterManagementController@edit');
@@ -26,3 +27,4 @@ Route::post('/management/update', 'RegisterManagementController@update');
 Route::get('/management/{id}/conform', 'RegisterManagementController@conform');
 Route::post('/management/delete', 'RegisterManagementController@delete');
 Route::get('/management/schedule', 'RegisterManagementController@schedule');
+Route::post('/management/schedule', 'RegisterManagementController@scheduleToMonthly');

@@ -8,6 +8,15 @@
                 <div class="panel-heading">予約一覧</div>
 
                 <div class="panel-body">
+                    {!! Form::open(['url' => action('RegisterManagementController@indexToMonthly')]) !!}
+                    <table>
+                        <tr>
+                            <td>{!! Form::selectYear('year', 2019, 2020) !!}年</td>
+                            <td>{!! Form::selectMonth('month') !!}</td>
+                            <td>{!! Form::submit('表示') !!}</td>
+                        </tr>
+                    </table>
+                    {!! Form::close() !!}
                     <table class="management">
                         <tr>
                             <th class="name">名前</th>
