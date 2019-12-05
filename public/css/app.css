@@ -8427,3 +8427,42 @@ table.schedule tbody tr td {
   border-width: thin;
 }
 
+table.total {
+  width: 50%;
+}
+
+table.total tbody tr th {
+  border: solid;
+  border-width: thin;
+}
+
+table.total tbody tr .yearmonth {
+  width: 40%;
+}
+
+table.total tbody tr .count {
+  width: 30%;
+}
+
+table.total tbody tr .total {
+  width: 30%;
+}
+
+table.total tbody tr td {
+  width: 30%;
+  border: solid;
+  border-width: thin;
+}
+
+table.total tbody tr .yearmonth {
+  width: 40%;
+}
+
+table.total tbody tr .count {
+  width: 30%;
+}
+
+table.total tbody tr .total {
+  width: 30%;
+}
+

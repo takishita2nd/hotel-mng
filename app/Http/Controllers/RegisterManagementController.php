@@ -156,11 +156,17 @@ class RegisterManagementController extends Controller
 
     /**
      * スケジュール表示の月別表示
-     *
-     * @return \Illuminate\Http\Response
      */
     public function scheduleToMonthly(Request $request)
     {
         return redirect('management/schedule?year='.$request->year.'&month='.$request->month);
     }
+
+    /**
+     * 月毎の集計を表示
+     */
+    public function total()
+    {
+        return view('register.total', ['Lists' => $this->registerManagement->countByMonthly()]);
+    } 
 }

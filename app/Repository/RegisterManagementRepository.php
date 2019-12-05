@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use Illuminate\Support\Facades\DB;
 use App\Model\ReserveManagement;
 use App\Model\ReserveDayList;
 
@@ -150,6 +151,16 @@ class RegisterManagementRepository
         }
 
         return true;
+    }
+
+    /**
+     * 月毎に集計する
+     */
+    public function countByMonthly()
+    {
+        return ReserveDayList::select(DB::raw('DATE_FORMAT(day, "%Y-%m") as yearmonth'), DB::raw('count(*) as count'), DB::raw('count(*) * 2000 as total'))
+                                ->groupby('yearmonth')
+                                ->get();
     }
 
     public function attachToSchedule($model)

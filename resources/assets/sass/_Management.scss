@@ -77,3 +77,35 @@ table.schedule{
         }
     }
 }
+table.total{
+    width: 50%;
+    tbody tr{
+        th {
+            border: solid;
+            border-width: thin;
+        }
+        .yearmonth {
+            width: 40%;            
+        }
+        .count {
+            width: 30%;
+        }
+        .total {
+            width: 30%;
+        }
+        td {
+            width: 30%;
+            border: solid;
+            border-width: thin;
+        }
+        .yearmonth {
+            width: 40%;            
+        }
+        .count {
+            width: 30%;
+        }
+        .total {
+            width: 30%;
+        }
+    }
+}

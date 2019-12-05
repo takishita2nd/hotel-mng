@@ -44,6 +44,7 @@
                     {{ Html::Link('/management/create', '追加', ['class' => 'btn']) }}
                 </div>
                 <div>{{ Html::link('/management/schedule', 'スケジュール', ['class' => 'btn']) }}</div>
+                <div>{{ Html::link('/management/total', '集計', ['class' => 'btn']) }}</div>
             </div>
         </div>
     </div>
