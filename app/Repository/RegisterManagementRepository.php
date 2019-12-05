@@ -8,7 +8,7 @@ use App\Model\ReserveDayList;
 
 class RegisterManagementRepository
 {
-    private $paramNames = ['name', 'address', 'phone', 'num', 'days', 'start_day'];
+    private $paramNames = ['name', 'address', 'phone', 'num', 'days', 'start_day', 'lodging'];
 
     /**
      * 予約一覧を取得する
@@ -17,7 +17,8 @@ class RegisterManagementRepository
      */
     public function getList()
     {
-        return ReserveManagement::orderBy('start_day')
+        return ReserveManagement::where('lodging', false)
+                                    ->orderBy('start_day')
                                     ->get();
     }
 
@@ -30,6 +31,7 @@ class RegisterManagementRepository
     {
         return ReserveManagement::where('start_day', '>=', date('Y-m-d', strtotime('first day of '.$year.'-'.$month)))
                                 ->where('start_day', '<=', date('Y-m-d', strtotime('last day of '.$year.'-'.$month)))
+                                ->where('lodging', false)
                                 ->orderBy('start_day')
                                 ->get();
     }
@@ -80,6 +82,16 @@ class RegisterManagementRepository
     }
 
     /**
+     * 宿泊処理を行う
+     */
+    public function lodging($id)
+    {
+        $model = $this->getItemById($id);
+        $model->lodging = true;
+        $model->save();
+    }
+
+    /**
      * スケジュール一覧を取得する
      */
     public function getSchedule()
@@ -90,7 +102,11 @@ class RegisterManagementRepository
                                     ->get();
         foreach($models as $model)
         {
-            $lists[$index] = array('day' => $model->day, 'name' => $model->reserveManagements()->first()->name);
+            $lists[$index] = array(
+                                'day' => $model->day,
+                                'name' => $model->reserveManagements()->first()->name,
+                                'lodging' => $model->reserveManagements()->first()->lodging
+                            );
             $index++;
         }
         return $lists;
@@ -109,7 +125,11 @@ class RegisterManagementRepository
                                 ->get();
         foreach($models as $model)
         {
-            $lists[$index] = array('day' => $model->day, 'name' => $model->reserveManagements()->first()->name);
+            $lists[$index] = array(
+                                'day' => $model->day,
+                                'name' => $model->reserveManagements()->first()->name,
+                                'lodging' => $model->reserveManagements()->first()->lodging
+                                );
             $index++;
         }
         return $lists;
@@ -158,11 +178,44 @@ class RegisterManagementRepository
     }
 
     /**
+     * 更新時のスケジュールの重複を確認する
+     * 
+     * @return boolean
+     */
+    public function checkScheduleForUpdate($date, $num, $userId)
+    {
+        $model2 = ReserveDayList::where(['day' => $date])->first();
+        if(is_null($model2) == false)
+        {
+            if($model2->reserveManagements()->first()->id != $userId)
+            {
+                return false;
+            }
+        }
+        for($i = 1; $i < $num; $i++)
+        {
+            $model2 = ReserveDayList::where(['day' => date('Y-m-d', strtotime($date.'+'.$i.' day'))])->first();
+            if(is_null($model2) == false)
+            {
+                if($model2->reserveManagements()->first()->id != $userId)
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * 月毎に集計する
      */
     public function countByMonthly()
     {
         return ReserveDayList::select(DB::raw('DATE_FORMAT(day, "%Y-%m") as yearmonth'), DB::raw('count(*) as count'), DB::raw('count(*) * 2000 as total'))
+                                ->leftJoin('reserve_day_list_reserve_management', 'reserve_day_lists.id', '=', 'reserve_day_list_reserve_management.reserve_day_list_id')
+                                ->leftJoin('reserve_managements', 'reserve_day_list_reserve_management.reserve_management_id', '=', 'reserve_managements.id')
+                                ->where('reserve_managements.lodging', true)
                                 ->groupby('yearmonth')
                                 ->get();
     }

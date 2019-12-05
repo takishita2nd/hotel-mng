@@ -8343,7 +8343,7 @@ table.management tbody tr th {
 }
 
 table.management tbody tr .name {
-  width: 15%;
+  width: 10%;
 }
 
 table.management tbody tr .address {
@@ -8372,7 +8372,7 @@ table.management tbody tr td {
 }
 
 table.management tbody tr .name {
-  width: 15%;
+  width: 10%;
 }
 
 table.management tbody tr .address {
@@ -8416,15 +8416,37 @@ table.schedule {
 }
 
 table.schedule tbody tr th {
-  width: 50%;
   border: solid;
   border-width: thin;
 }
 
+table.schedule tbody tr .date {
+  width: 40%;
+}
+
+table.schedule tbody tr .name {
+  width: 40%;
+}
+
+table.schedule tbody tr .lodging {
+  width: 20%;
+}
+
 table.schedule tbody tr td {
-  width: 50%;
   border: solid;
   border-width: thin;
+}
+
+table.schedule tbody tr .date {
+  width: 40%;
+}
+
+table.schedule tbody tr .name {
+  width: 40%;
+}
+
+table.schedule tbody tr .lodging {
+  width: 20%;
 }
 
 table.total {

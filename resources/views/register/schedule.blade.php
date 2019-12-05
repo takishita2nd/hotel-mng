@@ -19,13 +19,19 @@
                     {!! Form::close() !!}
                     <table class="schedule">
                         <tr>
-                            <th>日時</th>
-                            <th>名前</th>
+                            <th class="date">日時</th>
+                            <th class="name">名前</th>
+                            <th class="lodging">宿泊状況</th>
                         </tr>
                     @foreach ($Lists as $list)
                         <tr>
-                            <td>{{ $list['day'] }}</td>
-                            <td>{{ $list['name'] }}</td>
+                            <td class="date">{{ $list['day'] }}</td>
+                            <td class="name">{{ $list['name'] }}</td>
+                            @if ($list['lodging'])
+                                <td class="lodging">チェック</td>
+                            @else
+                                <td class="lodging">未チェック</td>
+                            @endif
                         </tr>
                     @endforeach
                     </table>

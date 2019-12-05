@@ -26,6 +26,7 @@ Route::get('/management/{id}/edit', 'RegisterManagementController@edit');
 Route::post('/management/update', 'RegisterManagementController@update');
 Route::get('/management/{id}/conform', 'RegisterManagementController@conform');
 Route::post('/management/delete', 'RegisterManagementController@delete');
+Route::post('/management/lodging', 'RegisterManagementController@lodging');
 Route::get('/management/schedule', 'RegisterManagementController@schedule');
 Route::post('/management/schedule', 'RegisterManagementController@scheduleToMonthly');
 Route::get('/management/total', 'RegisterManagementController@total');

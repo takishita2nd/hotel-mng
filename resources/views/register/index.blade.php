@@ -27,6 +27,7 @@
                             <th class="num">宿泊日数</th>
                             <th class="command">編集</th>
                             <th class="command">削除</th>
+                            <th class="command">宿泊</th>
                         </tr>
                     @foreach ($registerLists as $list)
                         <tr>
@@ -38,6 +39,12 @@
                             <td class="num">{{ $list->days }}</td>
                             <td class="command">{{ Html::link('/management/'.$list->id.'/edit', '編集') }}</td>
                             <td class="command">{{ Html::link('/management/'.$list->id.'/conform', '削除') }}</td>
+                            <td class="command">
+                            {!! Form::open(['url' => action('RegisterManagementController@lodging')]) !!}
+                            {!! Form::hidden('id', $list->id) !!}
+                            {!! Form::submit('宿泊') !!}
+                            {!! Form::close() !!}
+                            </td>
                         </tr>
                     @endforeach
                     </table>

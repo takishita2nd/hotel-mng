@@ -6,7 +6,7 @@ table.management {
             border-width: thin;
         }
         .name{
-            width: 15%;
+            width: 10%;
         }
         .address{
             width: 20%;
@@ -28,7 +28,7 @@ table.management {
             border-width: thin;
         }
         .name{
-            width: 15%;
+            width: 10%;
         }
         .address{
             width: 20%;
@@ -66,14 +66,30 @@ table.schedule{
     width: 50%;
     tbody tr{
         th {
-            width: 50%;
             border: solid;
             border-width: thin;
         }
+        .date {
+            width: 40%;
+        }
+        .name {
+            width: 40%;
+        }
+        .lodging {
+            width: 20%;
+        }
         td {
-            width: 50%;
             border: solid;
             border-width: thin;
+        }
+        .date {
+            width: 40%;
+        }
+        .name {
+            width: 40%;
+        }
+        .lodging {
+            width: 20%;
         }
     }
 }

@@ -79,7 +79,8 @@ class RegisterManagementController extends Controller
             $param[2] => $request->phone,
             $param[3] => $request->num,
             $param[4] => $request->days,
-            $param[5] => $request->start_day
+            $param[5] => $request->start_day,
+            $param[6] => false
         ]);
         return redirect('management');
     }
@@ -99,7 +100,7 @@ class RegisterManagementController extends Controller
      */
     public function update(ManagementRequest $request)
     {
-        if($this->registerManagement->checkSchedule() == false)
+        if($this->registerManagement->checkScheduleForUpdate($request->start_day, $request->days, $request->id) == false)
         {
             return redirect('management/create')
                         ->with(['error' => 'スケジュールが重複します'])
@@ -113,7 +114,8 @@ class RegisterManagementController extends Controller
             $param[2] => $request->phone,
             $param[3] => $request->num,
             $param[4] => $request->days,
-            $param[5] => $request->start_day
+            $param[5] => $request->start_day,
+            $param[6] => false
         ]);
         return redirect('management');
     }
@@ -134,6 +136,17 @@ class RegisterManagementController extends Controller
     public function delete(Request $request)
     {
         $this->registerManagement->deleteById($request->id);
+        return redirect('management');
+    }
+
+    /**
+     * 宿泊処理確認
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function lodging(Request $request)
+    {
+        $this->registerManagement->lodging($request->id);
         return redirect('management');
     }
 
