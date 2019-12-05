@@ -17,7 +17,8 @@ class RegisterManagementRepository
      */
     public function getList()
     {
-        return ReserveManagement::all();
+        return ReserveManagement::orderBy('start_day')
+                                    ->get();
     }
 
     /**
@@ -29,6 +30,7 @@ class RegisterManagementRepository
     {
         return ReserveManagement::where('start_day', '>=', date('Y-m-d', strtotime('first day of '.$year.'-'.$month)))
                                 ->where('start_day', '<=', date('Y-m-d', strtotime('last day of '.$year.'-'.$month)))
+                                ->orderBy('start_day')
                                 ->get();
     }
 
@@ -84,7 +86,8 @@ class RegisterManagementRepository
     {
         $lists = array();
         $index = 0;
-        $models = ReserveDayList::get();
+        $models = ReserveDayList::orderBy('day')
+                                    ->get();
         foreach($models as $model)
         {
             $lists[$index] = array('day' => $model->day, 'name' => $model->reserveManagements()->first()->name);
@@ -102,6 +105,7 @@ class RegisterManagementRepository
         $index = 0;
         $models = ReserveDayList::where('day', '>=', date('Y-m-d', strtotime('first day of '.$year.'-'.$month)))
                                 ->where('day', '<=', date('Y-m-d', strtotime('last day of '.$year.'-'.$month)))
+                                ->orderBy('day')
                                 ->get();
         foreach($models as $model)
         {
