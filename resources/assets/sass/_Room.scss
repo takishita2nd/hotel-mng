@@ -1,0 +1,31 @@
+table.room {
+    width: 100%;
+    tbody tr{
+        th {
+            border: solid;
+            border-width: thin;
+        }
+        .name{
+            width: 50%;
+        }
+        .price{
+            width: 40%;
+        }
+        .command{
+            width: 5%;
+        }
+        td {
+            border: solid;
+            border-width: thin;
+        }
+        .name{
+            width: 50%;
+        }
+        .price{
+            width: 40%;
+        }
+        .command{
+            width: 5%;
+        }
+    }
+}

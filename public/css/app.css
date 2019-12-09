@@ -8488,3 +8488,41 @@ table.total tbody tr .total {
   width: 30%;
 }
 
+table.room {
+  width: 100%;
+}
+
+table.room tbody tr th {
+  border: solid;
+  border-width: thin;
+}
+
+table.room tbody tr .name {
+  width: 50%;
+}
+
+table.room tbody tr .price {
+  width: 40%;
+}
+
+table.room tbody tr .command {
+  width: 5%;
+}
+
+table.room tbody tr td {
+  border: solid;
+  border-width: thin;
+}
+
+table.room tbody tr .name {
+  width: 50%;
+}
+
+table.room tbody tr .price {
+  width: 40%;
+}
+
+table.room tbody tr .command {
+  width: 5%;
+}
+

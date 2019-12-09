@@ -30,3 +30,11 @@ Route::post('/management/lodging', 'RegisterManagementController@lodging');
 Route::get('/management/schedule', 'RegisterManagementController@schedule');
 Route::post('/management/schedule', 'RegisterManagementController@scheduleToMonthly');
 Route::get('/management/total', 'RegisterManagementController@total');
+
+Route::get('/room', 'RoomController@index');
+Route::get('/room/create', 'RoomController@create');
+Route::post('/room', 'RoomController@store');
+Route::get('/room/{id}/edit', 'RoomController@edit');
+Route::post('/room/update', 'RoomController@update');
+Route::get('/room/{id}/conform', 'RoomController@conform');
+Route::post('/room/delete', 'RoomController@delete');
