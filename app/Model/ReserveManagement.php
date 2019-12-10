@@ -12,4 +12,9 @@ class ReserveManagement extends Model
     {
         return $this->belongsToMany('App\Model\ReserveDayList');
     }
+
+    public function rooms()
+    {
+        return $this->belongsToMany('App\Model\Room');
+    }
 }

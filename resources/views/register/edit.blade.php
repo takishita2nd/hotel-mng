@@ -42,6 +42,10 @@
                         <td>{!! Form::select('num', ['1' => 1, '2' => 2], $item->num) !!}</td>
                     </tr>
                     <tr>
+                        <th>宿泊部屋</th>
+                        <td>{!! Form::select('room', $rooms, $item->room_num) !!}</td>
+                    </tr>
+                    <tr>
                         <th>宿泊日数</th>
                         <td>{!! Form::select('days', ['1' => 1, '2' => 2, '3' => 3, '4' => 4], $item->days) !!}</td>
                     </tr>

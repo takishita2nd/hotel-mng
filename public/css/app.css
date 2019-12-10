@@ -8347,14 +8347,18 @@ table.management tbody tr .name {
 }
 
 table.management tbody tr .address {
-  width: 20%;
-}
-
-table.management tbody tr .phone {
   width: 15%;
 }
 
+table.management tbody tr .phone {
+  width: 10%;
+}
+
 table.management tbody tr .num {
+  width: 5%;
+}
+
+table.management tbody tr .room {
   width: 10%;
 }
 
@@ -8376,15 +8380,19 @@ table.management tbody tr .name {
 }
 
 table.management tbody tr .address {
-  width: 20%;
-}
-
-table.management tbody tr .phone {
   width: 15%;
 }
 
-table.management tbody tr .num {
+table.management tbody tr .phone {
   width: 10%;
+}
+
+table.management tbody tr .room {
+  width: 10%;
+}
+
+table.management tbody tr .num {
+  width: 5%;
 }
 
 table.management tbody tr .date {

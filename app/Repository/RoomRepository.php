@@ -71,6 +71,19 @@ class RoomRepository
         return Room::where(['id' => $id])->first();
     }
 
+    /**
+     * IDと部屋名のリストを取得する
+     */
+    public function getRoomList()
+    {
+        $rooms = Array();
+        foreach(Room::get() as $room)
+        {
+            $rooms[$room->id] = $room->name;
+        }
+        return $rooms;
+    }
+
     public function getParam()
     {
         return $this->paramNames;

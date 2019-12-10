@@ -23,8 +23,9 @@
                             <th class="address">住所</th>
                             <th class="phone">電話番号</th>
                             <th class="num">人数</th>
+                            <th class="room">部屋</th>
                             <th class="date">宿泊日</th>
-                            <th class="num">宿泊日数</th>
+                            <th class="num">日数</th>
                             <th class="command">編集</th>
                             <th class="command">削除</th>
                             <th class="command">宿泊</th>
@@ -35,6 +36,7 @@
                             <td class="address">{{ $list->address }}</td>
                             <td class="phone">{{ $list->phone }}</td>
                             <td class="num">{{ $list->num }}</td>
+                            <td class="room">{{ $list->room }}</td>
                             <td class="date">{{ $list->start_day }}</td>
                             <td class="num">{{ $list->days }}</td>
                             <td class="command">{{ Html::link('/management/'.$list->id.'/edit', '編集') }}</td>

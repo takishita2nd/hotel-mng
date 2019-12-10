@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Repository\RegisterManagementRepository;
+use App\Repository\RoomRepository;
 use App\Http\Requests\ManagementRequest;
 
 class RegisterManagementController extends Controller
 {
     protected $registerManagement;
+    protected $roomRepository;
 
     /**
      * Create a new controller instance.
@@ -20,6 +22,7 @@ class RegisterManagementController extends Controller
     {
         $this->middleware('auth');
         $this->registerManagement = new RegisterManagementRepository();
+        $this->roomRepository = new RoomRepository();
     }
 
     /**
@@ -58,7 +61,8 @@ class RegisterManagementController extends Controller
      */
     public function create()
     {
-        return view('register.create');
+        return view('register.create',
+                    ['rooms' => $this->roomRepository->getRoomList()]);
     }
 
     /**
@@ -81,7 +85,7 @@ class RegisterManagementController extends Controller
             $param[4] => $request->days,
             $param[5] => $request->start_day,
             $param[6] => false
-        ]);
+        ], $request->room);
         return redirect('management');
     }
 
@@ -92,7 +96,9 @@ class RegisterManagementController extends Controller
      */
     public function edit($id)
     {
-        return view('register.edit', ['item' => $this->registerManagement->getItemById($id)]);
+        return view('register.edit',
+                    ['item' => $this->registerManagement->getReserveById($id),
+                     'rooms' => $this->roomRepository->getRoomList()]);
     }
 
     /**
@@ -116,7 +122,7 @@ class RegisterManagementController extends Controller
             $param[4] => $request->days,
             $param[5] => $request->start_day,
             $param[6] => false
-        ]);
+        ], $request->room);
         return redirect('management');
     }
 
@@ -127,7 +133,7 @@ class RegisterManagementController extends Controller
      */
     public function conform($id)
     {
-        return view('register.conform', ['item' => $this->registerManagement->getItemById($id)]);
+        return view('register.conform', ['item' => $this->registerManagement->getReserveById($id)]);
     }
 
     /**

@@ -28,6 +28,7 @@ class ManagementRequest extends FormRequest
             'address' => 'required|string',
             'phone' => 'required|digits:11',
             'num' => 'required|numeric|digits_between:1,2',
+            'room' => 'required|numeric',
             'days' => 'required|numeric|digits_between:1,4',
             'start_day' => 'required|date',
         ];

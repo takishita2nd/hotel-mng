@@ -5,6 +5,7 @@ namespace App\Repository;
 use Illuminate\Support\Facades\DB;
 use App\Model\ReserveManagement;
 use App\Model\ReserveDayList;
+use App\Model\Room;
 
 class RegisterManagementRepository
 {
@@ -17,8 +18,12 @@ class RegisterManagementRepository
      */
     public function getList()
     {
-        return ReserveManagement::where('lodging', false)
+        $select = ['reserve_managements.id as id', 'reserve_managements.name as name', 'address', 'phone', 'num', 'rooms.name as room', 'days', 'start_day'];
+        return ReserveManagement::select($select)
+                                    ->where('lodging', false)
                                     ->orderBy('start_day')
+                                    ->leftJoin('reserve_management_room', 'reserve_managements.id', '=', 'reserve_management_room.reserve_management_id')
+                                    ->leftJoin('rooms', 'reserve_management_room.room_id', '=', 'rooms.id')
                                     ->get();
     }
 
@@ -37,11 +42,22 @@ class RegisterManagementRepository
     }
 
     /**
+     * 予約を一件取得する
+     */
+    public function getReserveById($id)
+    {
+        $model = $this->getItemById($id);
+        $model->room_num = $model->rooms()->first()->id;
+        $model->room_name = $model->rooms()->first()->name;
+        return $model;
+    }
+
+    /**
      * 予約を登録する
      * 
      * @return void
      */
-    public function add($param)
+    public function add($param, $room)
     {
         $model = new ReserveManagement;
         foreach($this->paramNames as $name)
@@ -49,6 +65,7 @@ class RegisterManagementRepository
             $model->$name = $param[$name];
         }
         $model->save();
+        $this->attachToRoom($model, $room);
         $this->attachToSchedule($model);
     }
 
@@ -57,7 +74,7 @@ class RegisterManagementRepository
      * 
      * @return void
      */
-    public function updateById($id, $param)
+    public function updateById($id, $param, $room)
     {
         $model = $this->getItemById($id);
         foreach($this->paramNames as $name)
@@ -65,7 +82,9 @@ class RegisterManagementRepository
             $model->$name = $param[$name];
         }
         $model->save();
+        $this->detachToRoom($model, $model->rooms()->first()->id);
         $this->detachToSchedule($model);
+        $this->attachToRoom($model, $room);
         $this->attachToSchedule($model);
     }
 
@@ -77,6 +96,7 @@ class RegisterManagementRepository
     public function deleteById($id)
     {
         $model = $this->getItemById($id);
+        $this->detachToRoom($model, $model->rooms()->first()->id);
         $this->detachToSchedule($model);
         $model->delete();
     }
@@ -243,6 +263,18 @@ class RegisterManagementRepository
         {
             $model2->delete();
         }
+    }
+
+    public function attachToRoom($model, $room)
+    {
+        $model3 = Room::where('id', $room)->first();
+        $model->rooms()->attach($model3);
+    }
+
+    public function detachToRoom($model, $room)
+    {
+        $model3 = Room::where('id', $room)->first();
+        $model->rooms()->detach($model3);
     }
 
     public function getParam()

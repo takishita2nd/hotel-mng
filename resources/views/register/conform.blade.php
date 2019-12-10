@@ -28,6 +28,10 @@
                         <td>{!! $item->num !!}</td>
                     </tr>
                     <tr>
+                        <th>宿泊部屋</th>
+                        <td>{!! $item->room_name !!}</td>
+                    </tr>
+                    <tr>
                         <th>宿泊日数</th>
                         <td>{!! $item->days !!}</td>
                     </tr>
