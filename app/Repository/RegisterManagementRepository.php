@@ -125,6 +125,7 @@ class RegisterManagementRepository
             $lists[$index] = array(
                                 'day' => $model->day,
                                 'name' => $model->reserveManagements()->first()->name,
+                                'room' => $model->reserveManagements()->first()->rooms()->first()->name,
                                 'lodging' => $model->reserveManagements()->first()->lodging
                             );
             $index++;
@@ -148,6 +149,7 @@ class RegisterManagementRepository
             $lists[$index] = array(
                                 'day' => $model->day,
                                 'name' => $model->reserveManagements()->first()->name,
+                                'room' => $model->reserveManagements()->rooms()->first()->name,
                                 'lodging' => $model->reserveManagements()->first()->lodging
                                 );
             $index++;

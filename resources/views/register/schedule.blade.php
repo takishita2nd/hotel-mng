@@ -21,12 +21,14 @@
                         <tr>
                             <th class="date">日時</th>
                             <th class="name">名前</th>
+                            <th class="room">部屋</th>
                             <th class="lodging">宿泊状況</th>
                         </tr>
                     @foreach ($Lists as $list)
                         <tr>
                             <td class="date">{{ $list['day'] }}</td>
                             <td class="name">{{ $list['name'] }}</td>
+                            <td class="room">{{ $list['room'] }}</td>
                             @if ($list['lodging'])
                                 <td class="lodging">チェック</td>
                             @else

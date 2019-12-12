@@ -8433,7 +8433,11 @@ table.schedule tbody tr .date {
 }
 
 table.schedule tbody tr .name {
-  width: 40%;
+  width: 20%;
+}
+
+table.schedule tbody tr .room {
+  width: 20%;
 }
 
 table.schedule tbody tr .lodging {
@@ -8450,7 +8454,11 @@ table.schedule tbody tr .date {
 }
 
 table.schedule tbody tr .name {
-  width: 40%;
+  width: 20%;
+}
+
+table.schedule tbody tr .room {
+  width: 20%;
 }
 
 table.schedule tbody tr .lodging {
