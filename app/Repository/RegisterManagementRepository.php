@@ -182,17 +182,17 @@ class RegisterManagementRepository
      * 
      * @return boolean
      */
-    public function checkSchedule($date, $num)
+    public function checkSchedule($date, $num, $room)
     {
-        if(ReserveDayList::where(['day' => $date])->count() != 0)
+        for($i = 0; $i < $num; $i++)
         {
-            return false;
-        }
-        for($i = 1; $i < $num; $i++)
-        {
-            if(ReserveDayList::where(['day' => date('Y-m-d', strtotime($date.'+'.$i.' day'))])->count() != 0)
+            $record = ReserveDayList::where(['day' => date('Y-m-d', strtotime($date.'+'.$i.' day'))])->first();
+            if(is_null($record) == false)
             {
-                return false;
+                if($record->reserveManagements()->first()->rooms()->first()->id == $room)
+                {
+                    return false;
+                }
             }
         }
 
@@ -204,24 +204,19 @@ class RegisterManagementRepository
      * 
      * @return boolean
      */
-    public function checkScheduleForUpdate($date, $num, $userId)
+    public function checkScheduleForUpdate($date, $num, $userId, $room)
     {
-        $model2 = ReserveDayList::where(['day' => $date])->first();
-        if(is_null($model2) == false)
-        {
-            if($model2->reserveManagements()->first()->id != $userId)
-            {
-                return false;
-            }
-        }
-        for($i = 1; $i < $num; $i++)
+        for($i = 0; $i < $num; $i++)
         {
             $model2 = ReserveDayList::where(['day' => date('Y-m-d', strtotime($date.'+'.$i.' day'))])->first();
             if(is_null($model2) == false)
             {
-                if($model2->reserveManagements()->first()->id != $userId)
+                if($model2->reserveManagements()->first()->rooms()->first()->id == $room)
                 {
-                    return false;
+                    if($model2->reserveManagements()->first()->id != $userId)
+                    {
+                        return false;
+                    }
                 }
             }
         }
