@@ -32,14 +32,24 @@ class RegisterManagementController extends Controller
      */
     public function index(Request $request)
     {
-        if(is_null($request->input('year')) || is_null($request->input('month')))
+        if(is_null($request->input('year')) || is_null($request->input('month')) || is_null($request->input('room')))
         {
-            return view('register.index', ['registerLists' => $this->registerManagement->getList()]);
+            return view('register.index', 
+                [
+                    'registerLists' => $this->registerManagement->getList(),
+                    'rooms' => $this->roomRepository->getRoomList()
+                ]
+            );
         }
         else
         {
             return view('register.index', 
-                ['registerLists' => $this->registerManagement->getListByMonth($request->input('year'), $request->input('month'))]
+                [
+                    'registerLists' => $this->registerManagement->getListByMonth($request->input('year'), 
+                                                                                $request->input('month'), 
+                                                                                $request->input('room')),
+                    'rooms' => $this->roomRepository->getRoomList()
+                ]
             );
         }
     }
@@ -51,7 +61,7 @@ class RegisterManagementController extends Controller
      */
     public function indexToMonthly(Request $request)
     {
-        return redirect('management?year='.$request->year.'&month='.$request->month);
+        return redirect('management?year='.$request->year.'&month='.$request->month.'&room='.$request->room);
     }
 
     /**
@@ -166,14 +176,24 @@ class RegisterManagementController extends Controller
      */
     public function schedule(Request $request)
     {
-        if(is_null($request->input('year')) || is_null($request->input('month')))
+        if(is_null($request->input('year')) || is_null($request->input('month')) || is_null($request->input('room')))
         {
-            return view('register.schedule', ['Lists' => $this->registerManagement->getSchedule()]);
+            return view('register.schedule', 
+                        [
+                            'Lists' => $this->registerManagement->getSchedule(),
+                            'rooms' => $this->roomRepository->getRoomList()
+                        ]
+                    );
         }
         else
         {
             return view('register.schedule', 
-                ['Lists' => $this->registerManagement->getScheduleByMonth($request->input('year'), $request->input('month'))]
+                [
+                    'Lists' => $this->registerManagement->getScheduleByMonth($request->input('year'), 
+                                                                            $request->input('month'),
+                                                                            $request->input('room')),
+                    'rooms' => $this->roomRepository->getRoomList()
+                ]
             );
         }
     }
@@ -183,7 +203,7 @@ class RegisterManagementController extends Controller
      */
     public function scheduleToMonthly(Request $request)
     {
-        return redirect('management/schedule?year='.$request->year.'&month='.$request->month);
+        return redirect('management/schedule?year='.$request->year.'&month='.$request->month.'&room='.$request->room);
     }
 
     /**

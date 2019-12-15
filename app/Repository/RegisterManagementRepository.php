@@ -32,10 +32,12 @@ class RegisterManagementRepository
      * 
      * @return ReserveManagement[]
      */
-    public function getListByMonth($year, $month)
+    public function getListByMonth($year, $month, $room)
     {
-        return ReserveManagement::where('start_day', '>=', date('Y-m-d', strtotime('first day of '.$year.'-'.$month)))
+        return ReserveManagement::leftJoin('reserve_management_room', 'reserve_managements.id', '=', 'reserve_management_room.reserve_management_id')
+                                ->where('start_day', '>=', date('Y-m-d', strtotime('first day of '.$year.'-'.$month)))
                                 ->where('start_day', '<=', date('Y-m-d', strtotime('last day of '.$year.'-'.$month)))
+                                ->where('reserve_management_room.room_id', $room)
                                 ->where('lodging', false)
                                 ->orderBy('start_day')
                                 ->get();
@@ -136,25 +138,18 @@ class RegisterManagementRepository
     /**
      * 月別スケジュール一覧を取得する
      */
-    public function getScheduleByMonth($year, $month)
+    public function getScheduleByMonth($year, $month, $room)
     {
-        $lists = array();
-        $index = 0;
-        $models = ReserveDayList::where('day', '>=', date('Y-m-d', strtotime('first day of '.$year.'-'.$month)))
+        return ReserveDayList::select('day', 'reserve_managements.name as name', 'rooms.name as room', 'lodging')
+                                ->leftJoin('reserve_day_list_reserve_management', 'reserve_day_lists.id', '=', 'reserve_day_list_reserve_management.reserve_day_list_id')
+                                ->leftJoin('reserve_managements', 'reserve_day_list_reserve_management.reserve_management_id', '=', 'reserve_managements.id')
+                                ->leftJoin('reserve_management_room', 'reserve_managements.id', '=', 'reserve_management_room.reserve_management_id')
+                                ->leftJoin('rooms', 'reserve_management_room.room_id', '=', 'rooms.id')
+                                ->where('day', '>=', date('Y-m-d', strtotime('first day of '.$year.'-'.$month)))
                                 ->where('day', '<=', date('Y-m-d', strtotime('last day of '.$year.'-'.$month)))
+                                ->where('rooms.id', $room)
                                 ->orderBy('day')
                                 ->get();
-        foreach($models as $model)
-        {
-            $lists[$index] = array(
-                                'day' => $model->day,
-                                'name' => $model->reserveManagements()->first()->name,
-                                'room' => $model->reserveManagements()->rooms()->first()->name,
-                                'lodging' => $model->reserveManagements()->first()->lodging
-                                );
-            $index++;
-        }
-        return $lists;
     }
 
     /**

@@ -13,6 +13,7 @@
                         <tr>
                             <td>{!! Form::selectYear('year', 2019, 2020) !!}年</td>
                             <td>{!! Form::selectMonth('month') !!}</td>
+                            <td>{!! Form::select('room', $rooms) !!}</td>
                             <td>{!! Form::submit('表示') !!}</td>
                         </tr>
                     </table>
