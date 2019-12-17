@@ -46,7 +46,7 @@
                     </tr>
                     <tr>
                         <th>宿泊日数</th>
-                        <td>{!! Form::select('days', ['1' => 1, '2' => 2, '3' => 3, '4' => 4]) !!}</td>
+                        <td>{!! Form::number('days', 1) !!}</td>
                     </tr>
                     <tr>
                         <th>宿泊日</th>

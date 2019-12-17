@@ -49,8 +49,11 @@ class RegisterManagementRepository
     public function getReserveById($id)
     {
         $model = $this->getItemById($id);
-        $model->room_num = $model->rooms()->first()->id;
-        $model->room_name = $model->rooms()->first()->name;
+        if(is_null($model->rooms()->first()) == false)
+        {
+            $model->room_num = $model->rooms()->first()->id;
+            $model->room_name = $model->rooms()->first()->name;
+        }
         return $model;
     }
 
@@ -124,10 +127,15 @@ class RegisterManagementRepository
                                     ->get();
         foreach($models as $model)
         {
+            $room = null;
+            if(is_null($model->reserveManagements()->first()->rooms()->first()) == false)
+            {
+                $room = $model->reserveManagements()->first()->rooms()->first()->name;
+            }
             $lists[$index] = array(
                                 'day' => $model->day,
                                 'name' => $model->reserveManagements()->first()->name,
-                                'room' => $model->reserveManagements()->first()->rooms()->first()->name,
+                                'room' => $room,
                                 'lodging' => $model->reserveManagements()->first()->lodging
                             );
             $index++;
