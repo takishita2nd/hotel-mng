@@ -222,14 +222,31 @@ class RegisterManagementRepository
     /**
      * 月毎に集計する
      */
-    public function countByMonthly()
+    public function countByMonthly($room = 1)
     {
-        return ReserveDayList::select(DB::raw('DATE_FORMAT(day, "%Y-%m") as yearmonth'), DB::raw('count(*) as count'), DB::raw('count(*) * 2000 as total'))
+        $lists = ReserveDayList::select(DB::raw('DATE_FORMAT(day, "%Y-%m") as yearmonth'), DB::raw('count(*) as count'), 'rooms.name as roomname')
                                 ->leftJoin('reserve_day_list_reserve_management', 'reserve_day_lists.id', '=', 'reserve_day_list_reserve_management.reserve_day_list_id')
                                 ->leftJoin('reserve_managements', 'reserve_day_list_reserve_management.reserve_management_id', '=', 'reserve_managements.id')
+                                ->leftJoin('reserve_management_room', 'reserve_managements.id', '=', 'reserve_management_room.reserve_management_id')
+                                ->leftJoin('rooms', 'reserve_management_room.room_id', '=', 'rooms.id')
                                 ->where('reserve_managements.lodging', true)
+                                ->where('rooms.id', $room)
                                 ->groupby('yearmonth')
+                                ->groupby('roomname')
                                 ->get();
+
+        $model3 = Room::where('id', $room)->first();
+
+        $ret = array();
+        $index = 0;
+        foreach($lists as $list)
+        {
+            $list->total = $list->count * $model3->price;
+            $ret[$index] = $list;
+            $index++;
+        }
+
+        return $ret;
     }
 
     public function attachToSchedule($model)

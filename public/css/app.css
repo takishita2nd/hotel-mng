@@ -8475,11 +8475,15 @@ table.total tbody tr th {
 }
 
 table.total tbody tr .yearmonth {
-  width: 40%;
+  width: 30%;
+}
+
+table.total tbody tr .name {
+  width: 20%;
 }
 
 table.total tbody tr .count {
-  width: 30%;
+  width: 20%;
 }
 
 table.total tbody tr .total {
@@ -8493,11 +8497,15 @@ table.total tbody tr td {
 }
 
 table.total tbody tr .yearmonth {
-  width: 40%;
+  width: 30%;
+}
+
+table.total tbody tr .name {
+  width: 20%;
 }
 
 table.total tbody tr .count {
-  width: 30%;
+  width: 20%;
 }
 
 table.total tbody tr .total {

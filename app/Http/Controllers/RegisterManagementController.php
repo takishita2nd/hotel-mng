@@ -209,8 +209,31 @@ class RegisterManagementController extends Controller
     /**
      * 月毎の集計を表示
      */
-    public function total()
+    public function total(Request $request)
     {
-        return view('register.total', ['Lists' => $this->registerManagement->countByMonthly()]);
-    } 
+        if(is_null($request->input('room')))
+        {
+            return view('register.total', 
+                            [
+                                'Lists' => $this->registerManagement->countByMonthly(),
+                                'rooms' => $this->roomRepository->getRoomList()
+                            ]);
+        }
+        else
+        {
+            return view('register.total', 
+                            [
+                                'Lists' => $this->registerManagement->countByMonthly($request->input('room')),
+                                'rooms' => $this->roomRepository->getRoomList()
+                            ]);
+        }
+    }
+
+    /**
+     * 月毎の集計を表示
+     */
+    public function totalToMonthly(Request $request)
+    {
+        return redirect('management/total?room='.$request->room);
+    }
 }
