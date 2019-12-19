@@ -9,7 +9,7 @@ use App\Model\Room;
 
 class RegisterManagementRepository
 {
-    private $paramNames = ['name', 'address', 'phone', 'num', 'days', 'start_day', 'lodging'];
+    private $paramNames = ['name', 'address', 'phone', 'num', 'days', 'start_day', 'lodging', 'checkout'];
 
     /**
      * 予約一覧を取得する
@@ -18,7 +18,7 @@ class RegisterManagementRepository
      */
     public function getList()
     {
-        $select = ['reserve_managements.id as id', 'reserve_managements.name as name', 'address', 'phone', 'num', 'rooms.name as room', 'days', 'start_day'];
+        $select = ['reserve_managements.id as id', 'reserve_managements.name as name', 'address', 'phone', 'num', 'rooms.name as room', 'checkout', 'start_day'];
         return ReserveManagement::select($select)
                                     ->where('lodging', false)
                                     ->orderBy('start_day')
@@ -34,7 +34,10 @@ class RegisterManagementRepository
      */
     public function getListByMonth($year, $month, $room)
     {
-        return ReserveManagement::leftJoin('reserve_management_room', 'reserve_managements.id', '=', 'reserve_management_room.reserve_management_id')
+        $select = ['reserve_managements.id as id', 'reserve_managements.name as name', 'address', 'phone', 'num', 'rooms.name as room', 'checkout', 'start_day'];
+        return ReserveManagement::select($select)
+                                ->leftJoin('reserve_management_room', 'reserve_managements.id', '=', 'reserve_management_room.reserve_management_id')
+                                ->leftJoin('rooms', 'reserve_management_room.room_id', '=', 'rooms.id')
                                 ->where('start_day', '>=', date('Y-m-d', strtotime('first day of '.$year.'-'.$month)))
                                 ->where('start_day', '<=', date('Y-m-d', strtotime('last day of '.$year.'-'.$month)))
                                 ->where('reserve_management_room.room_id', $room)
@@ -51,6 +54,7 @@ class RegisterManagementRepository
         $model = $this->getItemById($id);
         if(is_null($model->rooms()->first()) == false)
         {
+            $model->checkout = strtotime($model->checkout) - strtotime($model->checkout.' midnight');
             $model->room_num = $model->rooms()->first()->id;
             $model->room_name = $model->rooms()->first()->name;
         }
@@ -192,9 +196,12 @@ class RegisterManagementRepository
             $record = ReserveDayList::where(['day' => date('Y-m-d', strtotime($date.'+'.$i.' day'))])->first();
             if(is_null($record) == false)
             {
-                if($record->reserveManagements()->first()->rooms()->first()->id == $room)
+                if(is_null($record->reserveManagements()->first()->rooms()->first()) == false)
                 {
-                    return false;
+                    if($record->reserveManagements()->first()->rooms()->first()->id == $room)
+                    {
+                        return false;
+                    }
                 }
             }
         }
@@ -214,11 +221,14 @@ class RegisterManagementRepository
             $model2 = ReserveDayList::where(['day' => date('Y-m-d', strtotime($date.'+'.$i.' day'))])->first();
             if(is_null($model2) == false)
             {
-                if($model2->reserveManagements()->first()->rooms()->first()->id == $room)
+                if(is_null($model2->reserveManagements()->first()->rooms()->first()) == false)
                 {
-                    if($model2->reserveManagements()->first()->id != $userId)
+                    if($model2->reserveManagements()->first()->rooms()->first()->id == $room)
                     {
-                        return false;
+                        if($model2->reserveManagements()->first()->id != $userId)
+                        {
+                            return false;
+                        }
                     }
                 }
             }
@@ -254,6 +264,21 @@ class RegisterManagementRepository
             $index++;
         }
 
+        return $ret;
+    }
+
+    /**
+     * 時間一覧を30分おきにして返す
+     */
+    public function getTimeList()
+    {
+        $time = 0;
+        $ret = array();
+        for($i = 0; $i < 48; $i++)
+        {
+            $time = strtotime('00:00 + '.($i * 30).' minute') - strtotime('00:00');
+            $ret[$time] = date('H:i', $time);
+        }
         return $ret;
     }
 

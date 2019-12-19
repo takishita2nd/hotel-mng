@@ -72,7 +72,11 @@ class RegisterManagementController extends Controller
     public function create()
     {
         return view('register.create',
-                    ['rooms' => $this->roomRepository->getRoomList()]);
+                    [
+                        'rooms' => $this->roomRepository->getRoomList(),
+                        'timelist' => $this->registerManagement->getTimeList()
+                    ]
+                );
     }
 
     /**
@@ -96,7 +100,8 @@ class RegisterManagementController extends Controller
             $param[3] => $request->num,
             $param[4] => $request->days,
             $param[5] => $request->start_day,
-            $param[6] => false
+            $param[6] => false,
+            $param[7] => date('Y-m-d H:i', strtotime($request->start_day.'+'.$request->days.' day') + $request->checkout)
         ], $request->room);
         return redirect('management');
     }
@@ -109,8 +114,11 @@ class RegisterManagementController extends Controller
     public function edit($id)
     {
         return view('register.edit',
-                    ['item' => $this->registerManagement->getReserveById($id),
-                     'rooms' => $this->roomRepository->getRoomList()]);
+                    [
+                        'item' => $this->registerManagement->getReserveById($id),
+                        'rooms' => $this->roomRepository->getRoomList(),
+                        'timelist' => $this->registerManagement->getTimeList()
+                    ]);
     }
 
     /**
@@ -136,7 +144,8 @@ class RegisterManagementController extends Controller
             $param[3] => $request->num,
             $param[4] => $request->days,
             $param[5] => $request->start_day,
-            $param[6] => false
+            $param[6] => false,
+            $param[7] => date('Y-m-d H:i', strtotime($request->start_day.'+'.$request->days.' day') + $request->checkout)
         ], $request->room);
         return redirect('management');
     }

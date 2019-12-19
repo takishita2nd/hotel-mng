@@ -47,11 +47,15 @@
                     </tr>
                     <tr>
                         <th>宿泊日数</th>
-                        <td>{!! Form::select('days', ['1' => 1, '2' => 2, '3' => 3, '4' => 4], $item->days) !!}</td>
+                        <td>{!! Form::number('days', $item->days) !!}</td>
                     </tr>
                     <tr>
                         <th>宿泊日</th>
                         <td>{!! Form::date('start_day', $item->start_day) !!}</td>
+                    </tr>
+                    <tr>
+                        <th>チェックアウト</th>
+                        <td>{!! Form::select('checkout', $timelist, $item->checkout) !!}</td>
                     </tr>
                 </table>
                 {!! Form::submit('登録') !!}

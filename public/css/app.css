@@ -8343,11 +8343,11 @@ table.management tbody tr th {
 }
 
 table.management tbody tr .name {
-  width: 10%;
+  width: 5%;
 }
 
 table.management tbody tr .address {
-  width: 15%;
+  width: 10%;
 }
 
 table.management tbody tr .phone {
@@ -8356,6 +8356,10 @@ table.management tbody tr .phone {
 
 table.management tbody tr .num {
   width: 5%;
+}
+
+table.management tbody tr .checkout {
+  width: 10%;
 }
 
 table.management tbody tr .room {
@@ -8376,11 +8380,11 @@ table.management tbody tr td {
 }
 
 table.management tbody tr .name {
-  width: 10%;
+  width: 5%;
 }
 
 table.management tbody tr .address {
-  width: 15%;
+  width: 10%;
 }
 
 table.management tbody tr .phone {
@@ -8393,6 +8397,10 @@ table.management tbody tr .room {
 
 table.management tbody tr .num {
   width: 5%;
+}
+
+table.management tbody tr .checkout {
+  width: 10%;
 }
 
 table.management tbody tr .date {

@@ -52,6 +52,10 @@
                         <th>宿泊日</th>
                         <td>{!! Form::date('start_day', \Carbon\Carbon::now()) !!}</td>
                     </tr>
+                    <tr>
+                        <th>チェックアウト</th>
+                        <td>{!! Form::select('checkout', $timelist) !!}</td>
+                    </tr>
                 </table>
                 {!! Form::submit('登録') !!}
                 {!! Form::close() !!}
