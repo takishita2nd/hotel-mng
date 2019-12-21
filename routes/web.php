@@ -39,3 +39,5 @@ Route::get('/room/{id}/edit', 'RoomController@edit');
 Route::post('/room/update', 'RoomController@update');
 Route::get('/room/{id}/conform', 'RoomController@conform');
 Route::post('/room/delete', 'RoomController@delete');
+
+Route::post('/api/rooms', 'ApiController@rooms');
