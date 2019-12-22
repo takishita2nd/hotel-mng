@@ -44825,6 +44825,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -44835,7 +44851,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             months: [{ text: '1', value: 1 }, { text: '2', value: 2 }, { text: '3', value: 3 }, { text: '4', value: 4 }, { text: '5', value: 5 }, { text: '6', value: 6 }, { text: '7', value: 7 }, { text: '8', value: 8 }, { text: '9', value: 9 }, { text: '10', value: 10 }, { text: '11', value: 11 }, { text: '12', value: 12 }],
             selectRoom: 0,
             rooms: [],
-            result: []
+            result: [],
+            param: {
+                year: 2019,
+                month: 1,
+                room: 1
+            },
+            registers: []
         };
     },
 
@@ -44847,8 +44869,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var self = this;
             axios.post('/api/rooms').then(function (response) {
                 response.data.roomLists.forEach(function (element) {
-                    console.log(element.name);
                     self.rooms.push({ id: element.id, name: element.name });
+                });
+            }).catch(function (error) {
+                console.log("失敗しました");
+            });
+        },
+        getRegisters: function getRegisters() {
+            var self = this;
+            this.param.year = this.selectYear;
+            this.param.month = this.selectMonth;
+            this.param.room = this.selectRoom;
+            axios.post('/api/registers', this.param).then(function (response) {
+                self.registers = [];
+                response.data.registerLists.forEach(function (element) {
+                    self.registers.push({
+                        id: element.id,
+                        name: element.name,
+                        start_day: element.start_day,
+                        checkout: element.checkout
+                    });
                 });
             }).catch(function (error) {
                 console.log("失敗しました");
@@ -44865,126 +44905,170 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "details" }, [
+  return _c("div", [
     _c("table", [
-      _c("tr", [
-        _c("td", [
-          _c(
-            "select",
-            {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.selectYear,
-                  expression: "selectYear"
-                }
-              ],
-              on: {
-                change: function($event) {
-                  var $$selectedVal = Array.prototype.filter
-                    .call($event.target.options, function(o) {
-                      return o.selected
-                    })
-                    .map(function(o) {
-                      var val = "_value" in o ? o._value : o.value
-                      return val
-                    })
-                  _vm.selectYear = $event.target.multiple
-                    ? $$selectedVal
-                    : $$selectedVal[0]
-                }
-              }
-            },
-            _vm._l(_vm.years, function(year) {
-              return _c("option", { domProps: { value: year.value } }, [
-                _vm._v(_vm._s(year.text))
-              ])
-            }),
-            0
-          )
-        ]),
-        _vm._v(" "),
-        _c("td", [_vm._v("年")]),
-        _vm._v(" "),
-        _c("td", [
-          _c(
-            "select",
-            {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.selectMonth,
-                  expression: "selectMonth"
-                }
-              ],
-              on: {
-                change: function($event) {
-                  var $$selectedVal = Array.prototype.filter
-                    .call($event.target.options, function(o) {
-                      return o.selected
-                    })
-                    .map(function(o) {
-                      var val = "_value" in o ? o._value : o.value
-                      return val
-                    })
-                  _vm.selectMonth = $event.target.multiple
-                    ? $$selectedVal
-                    : $$selectedVal[0]
-                }
-              }
-            },
-            _vm._l(_vm.months, function(month) {
-              return _c("option", { domProps: { value: month.value } }, [
-                _vm._v(_vm._s(month.text))
-              ])
-            }),
-            0
-          )
-        ]),
-        _vm._v(" "),
-        _c("td", [_vm._v("月")]),
-        _vm._v(" "),
-        _c(
-          "select",
-          {
-            directives: [
+      _c("tbody", [
+        _c("tr", [
+          _c("td", [
+            _c(
+              "select",
               {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.selectRoom,
-                expression: "selectRoom"
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.selectYear,
+                    expression: "selectYear"
+                  }
+                ],
+                on: {
+                  click: _vm.getRegisters,
+                  change: function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.selectYear = $event.target.multiple
+                      ? $$selectedVal
+                      : $$selectedVal[0]
+                  }
+                }
+              },
+              _vm._l(_vm.years, function(year) {
+                return _c("option", { domProps: { value: year.value } }, [
+                  _vm._v(_vm._s(year.text))
+                ])
+              }),
+              0
+            )
+          ]),
+          _vm._v(" "),
+          _c("td", [_vm._v("年")]),
+          _vm._v(" "),
+          _c("td", [
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.selectMonth,
+                    expression: "selectMonth"
+                  }
+                ],
+                on: {
+                  click: _vm.getRegisters,
+                  change: function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.selectMonth = $event.target.multiple
+                      ? $$selectedVal
+                      : $$selectedVal[0]
+                  }
+                }
+              },
+              _vm._l(_vm.months, function(month) {
+                return _c("option", { domProps: { value: month.value } }, [
+                  _vm._v(_vm._s(month.text))
+                ])
+              }),
+              0
+            )
+          ]),
+          _vm._v(" "),
+          _c("td", [_vm._v("月")]),
+          _vm._v(" "),
+          _c(
+            "select",
+            {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.selectRoom,
+                  expression: "selectRoom"
+                }
+              ],
+              on: {
+                click: _vm.getRegisters,
+                change: function($event) {
+                  var $$selectedVal = Array.prototype.filter
+                    .call($event.target.options, function(o) {
+                      return o.selected
+                    })
+                    .map(function(o) {
+                      var val = "_value" in o ? o._value : o.value
+                      return val
+                    })
+                  _vm.selectRoom = $event.target.multiple
+                    ? $$selectedVal
+                    : $$selectedVal[0]
+                }
               }
-            ],
-            on: {
-              change: function($event) {
-                var $$selectedVal = Array.prototype.filter
-                  .call($event.target.options, function(o) {
-                    return o.selected
-                  })
-                  .map(function(o) {
-                    var val = "_value" in o ? o._value : o.value
-                    return val
-                  })
-                _vm.selectRoom = $event.target.multiple
-                  ? $$selectedVal
-                  : $$selectedVal[0]
-              }
-            }
-          },
-          _vm._l(_vm.rooms, function(room) {
-            return _c("option", { domProps: { value: room.id } }, [
-              _vm._v(_vm._s(room.name))
-            ])
-          }),
-          0
-        )
+            },
+            _vm._l(_vm.rooms, function(room) {
+              return _c("option", { domProps: { value: room.id } }, [
+                _vm._v(_vm._s(room.name))
+              ])
+            }),
+            0
+          )
+        ])
       ])
+    ]),
+    _vm._v(" "),
+    _c("table", { staticClass: "management" }, [
+      _c(
+        "tbody",
+        [
+          _vm._m(0),
+          _vm._v(" "),
+          _vm._l(_vm.registers, function(register) {
+            return _c("tr", [
+              _c("td", { staticClass: "name" }, [
+                _vm._v(_vm._s(register.name))
+              ]),
+              _vm._v(" "),
+              _c("td", { staticClass: "date" }, [
+                _vm._v(_vm._s(register.start_day))
+              ]),
+              _vm._v(" "),
+              _c("td", { staticClass: "checkout" }, [
+                _vm._v(_vm._s(register.checkout))
+              ])
+            ])
+          })
+        ],
+        2
+      )
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", [
+      _c("th", { staticClass: "name" }, [_vm._v("名前")]),
+      _vm._v(" "),
+      _c("th", { staticClass: "date" }, [_vm._v("宿泊日")]),
+      _vm._v(" "),
+      _c("th", { staticClass: "checkout" }, [_vm._v("チェックアウト")])
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {

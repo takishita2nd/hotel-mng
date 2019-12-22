@@ -22,7 +22,7 @@ Route::get('/management', 'RegisterManagementController@index');
 Route::post('/management/indexToMonthly', 'RegisterManagementController@indexToMonthly');
 Route::get('/management/create', 'RegisterManagementController@create');
 Route::post('/management', 'RegisterManagementController@store');
-Route::get('/management/{id}/edit', 'RegisterManagementController@edit');
+Route::get('/management/edit/{id}', 'RegisterManagementController@edit');
 Route::post('/management/update', 'RegisterManagementController@update');
 Route::get('/management/{id}/conform', 'RegisterManagementController@conform');
 Route::post('/management/delete', 'RegisterManagementController@delete');
@@ -41,3 +41,4 @@ Route::get('/room/{id}/conform', 'RoomController@conform');
 Route::post('/room/delete', 'RoomController@delete');
 
 Route::post('/api/rooms', 'ApiController@rooms');
+Route::post('/api/registers', 'ApiController@registers');

@@ -1,24 +1,40 @@
 <template>
-    <div class="details">
+    <div>
         <table>
-            <tr>
-                <td>
-                    <select v-model="selectYear">
-                        <option v-for="year in years" v-bind:value="year.value">{{ year.text }}</option>
-                    </select>
-                </td>
-                <td>年</td>
-                <td>
-                    <select v-model="selectMonth">
-                        <option v-for="month in months" v-bind:value="month.value">{{ month.text }}</option>
-                    </select>
-                </td>
-                <td>月</td>
-                    <select v-model="selectRoom">
-                        <option v-for="room in rooms" v-bind:value="room.id">{{ room.name }}</option>
-                    </select>
-                </td>
-            </tr>
+            <tbody>
+                <tr>
+                    <td>
+                        <select v-model="selectYear" @click="getRegisters">
+                            <option v-for="year in years" v-bind:value="year.value">{{ year.text }}</option>
+                        </select>
+                    </td>
+                    <td>年</td>
+                    <td>
+                        <select v-model="selectMonth" @click="getRegisters">
+                            <option v-for="month in months" v-bind:value="month.value">{{ month.text }}</option>
+                        </select>
+                    </td>
+                    <td>月</td>
+                        <select v-model="selectRoom" @click="getRegisters">
+                            <option v-for="room in rooms" v-bind:value="room.id">{{ room.name }}</option>
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="management">
+            <tbody>
+                <tr>
+                    <th class="name">名前</th>
+                    <th class="date">宿泊日</th>
+                    <th class="checkout">チェックアウト</th>
+                </tr>
+                <tr v-for="register in registers">
+                    <td class="name">{{ register.name }}</td>
+                    <td class="date">{{ register.start_day }}</td>
+                    <td class="checkout">{{ register.checkout }}</td>
+                </tr>
+            </tbody>
         </table>
     </div>
 </template>
@@ -50,6 +66,12 @@
                 selectRoom: 0,
                 rooms: [],
                 result: [],
+                param: {
+                    year: 2019,
+                    month: 1,
+                    room: 1
+                },
+                registers: []
             }
         },
         created: function() {
@@ -60,8 +82,28 @@
                 var self = this;
                 axios.post('/api/rooms').then(function(response){
                     response.data.roomLists.forEach(element => {
-                        console.log(element.name)
                         self.rooms.push({id:element.id, name:element.name});
+                    });
+                }).catch(function(error){
+                    console.log("失敗しました");
+                });
+            },
+            getRegisters: function() {
+                var self = this;
+                this.param.year = this.selectYear;
+                this.param.month = this.selectMonth;
+                this.param.room = this.selectRoom;
+                axios.post('/api/registers', this.param).then(function(response){
+                    self.registers = [];
+                    response.data.registerLists.forEach(element => {
+                        self.registers.push(
+                            {
+                                id:element.id, 
+                                name:element.name, 
+                                start_day:element.start_day, 
+                                checkout:element.checkout
+                            }
+                        );
                     });
                 }).catch(function(error){
                     console.log("失敗しました");
