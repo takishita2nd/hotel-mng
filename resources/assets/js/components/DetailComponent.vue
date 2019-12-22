@@ -29,13 +29,54 @@
                     <th class="date">宿泊日</th>
                     <th class="checkout">チェックアウト</th>
                 </tr>
-                <tr v-for="register in registers">
+                <tr v-for="register in registers" @click="openModal(register.id)">
                     <td class="name">{{ register.name }}</td>
                     <td class="date">{{ register.start_day }}</td>
                     <td class="checkout">{{ register.checkout }}</td>
                 </tr>
             </tbody>
         </table>
+        <div id="overlay" v-show="showContent" @click="closeModal">
+            <div id="content">
+                <table class="edit">
+                    <tbody>
+                        <tr>
+                            <th>名前</th>
+                            <td>{{ contents.name }}</td>
+                        </tr>
+                        <tr>
+                            <th>住所</th>
+                            <td>{{ contents.address }}</td>
+                        </tr>
+                        <tr>
+                            <th>電話番号</th>
+                            <td>{{ contents.phone }}</td>
+                        </tr>
+                        <tr>
+                            <th>人数</th>
+                            <td>{{ contents.num }}</td>
+                        </tr>
+                        <tr>
+                            <th>宿泊部屋</th>
+                            <td>{{ contents.room }}</td>
+                        </tr>
+                        <tr>
+                            <th>宿泊日数</th>
+                            <td>{{ contents.days }}</td>
+                        </tr>
+                        <tr>
+                            <th>宿泊日</th>
+                            <td>{{ contents.start_day }}</td>
+                        </tr>
+                        <tr>
+                            <th>チェックアウト</th>
+                            <td>{{ contents.checkout }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            <p><button @click="closeModal">close</button></p>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -71,7 +112,18 @@
                     month: 1,
                     room: 1
                 },
-                registers: []
+                registers: [],
+                showContent: false,
+                contents: {
+                    name: "",
+                    address: "",
+                    phone: "",
+                    num: 0,
+                    room: "",
+                    days: 0,
+                    start_day: "",
+                    checkout: "",
+                }
             }
         },
         created: function() {
@@ -99,7 +151,12 @@
                         self.registers.push(
                             {
                                 id:element.id, 
-                                name:element.name, 
+                                name:element.name,
+                                address:element.address,
+                                phone:element.phone,
+                                num:element.num,
+                                room:element.room,
+                                days:element.days,
                                 start_day:element.start_day, 
                                 checkout:element.checkout
                             }
@@ -108,6 +165,25 @@
                 }).catch(function(error){
                     console.log("失敗しました");
                 });
+            },
+            openModal: function(id){
+                for(var i = 0; i< this.registers.length; i++){
+                    if(this.registers[i].id == id){
+                        this.contents.name = this.registers[i].name;
+                        this.contents.address = this.registers[i].address;
+                        this.contents.phone = this.registers[i].phone;
+                        this.contents.num = this.registers[i].num;
+                        this.contents.room = this.registers[i].room;
+                        this.contents.days = this.registers[i].days;
+                        this.contents.start_day = this.registers[i].start_day;
+                        this.contents.checkout = this.registers[i].checkout;
+                        break;
+                    }
+                }
+                this.showContent = true
+            },
+            closeModal: function(){
+                this.showContent = false
             }
         }
     }

@@ -44841,6 +44841,47 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -44857,7 +44898,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 month: 1,
                 room: 1
             },
-            registers: []
+            registers: [],
+            showContent: false,
+            contents: {
+                name: "",
+                address: "",
+                phone: "",
+                num: 0,
+                room: "",
+                days: 0,
+                start_day: "",
+                checkout: ""
+            }
         };
     },
 
@@ -44886,6 +44938,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     self.registers.push({
                         id: element.id,
                         name: element.name,
+                        address: element.address,
+                        phone: element.phone,
+                        num: element.num,
+                        room: element.room,
+                        days: element.days,
                         start_day: element.start_day,
                         checkout: element.checkout
                     });
@@ -44893,6 +44950,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).catch(function (error) {
                 console.log("失敗しました");
             });
+        },
+        openModal: function openModal(id) {
+            for (var i = 0; i < this.registers.length; i++) {
+                if (this.registers[i].id == id) {
+                    this.contents.name = this.registers[i].name;
+                    this.contents.address = this.registers[i].address;
+                    this.contents.phone = this.registers[i].phone;
+                    this.contents.num = this.registers[i].num;
+                    this.contents.room = this.registers[i].room;
+                    this.contents.days = this.registers[i].days;
+                    this.contents.start_day = this.registers[i].start_day;
+                    this.contents.checkout = this.registers[i].checkout;
+                    break;
+                }
+            }
+            this.showContent = true;
+        },
+        closeModal: function closeModal() {
+            this.showContent = false;
         }
     }
 });
@@ -45035,24 +45111,109 @@ var render = function() {
           _vm._m(0),
           _vm._v(" "),
           _vm._l(_vm.registers, function(register) {
-            return _c("tr", [
-              _c("td", { staticClass: "name" }, [
-                _vm._v(_vm._s(register.name))
-              ]),
-              _vm._v(" "),
-              _c("td", { staticClass: "date" }, [
-                _vm._v(_vm._s(register.start_day))
-              ]),
-              _vm._v(" "),
-              _c("td", { staticClass: "checkout" }, [
-                _vm._v(_vm._s(register.checkout))
-              ])
-            ])
+            return _c(
+              "tr",
+              {
+                on: {
+                  click: function($event) {
+                    return _vm.openModal(register.id)
+                  }
+                }
+              },
+              [
+                _c("td", { staticClass: "name" }, [
+                  _vm._v(_vm._s(register.name))
+                ]),
+                _vm._v(" "),
+                _c("td", { staticClass: "date" }, [
+                  _vm._v(_vm._s(register.start_day))
+                ]),
+                _vm._v(" "),
+                _c("td", { staticClass: "checkout" }, [
+                  _vm._v(_vm._s(register.checkout))
+                ])
+              ]
+            )
           })
         ],
         2
       )
-    ])
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.showContent,
+            expression: "showContent"
+          }
+        ],
+        attrs: { id: "overlay" },
+        on: { click: _vm.closeModal }
+      },
+      [
+        _c("div", { attrs: { id: "content" } }, [
+          _c("table", { staticClass: "edit" }, [
+            _c("tbody", [
+              _c("tr", [
+                _c("th", [_vm._v("名前")]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(_vm.contents.name))])
+              ]),
+              _vm._v(" "),
+              _c("tr", [
+                _c("th", [_vm._v("住所")]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(_vm.contents.address))])
+              ]),
+              _vm._v(" "),
+              _c("tr", [
+                _c("th", [_vm._v("電話番号")]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(_vm.contents.phone))])
+              ]),
+              _vm._v(" "),
+              _c("tr", [
+                _c("th", [_vm._v("人数")]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(_vm.contents.num))])
+              ]),
+              _vm._v(" "),
+              _c("tr", [
+                _c("th", [_vm._v("宿泊部屋")]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(_vm.contents.room))])
+              ]),
+              _vm._v(" "),
+              _c("tr", [
+                _c("th", [_vm._v("宿泊日数")]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(_vm.contents.days))])
+              ]),
+              _vm._v(" "),
+              _c("tr", [
+                _c("th", [_vm._v("宿泊日")]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(_vm.contents.start_day))])
+              ]),
+              _vm._v(" "),
+              _c("tr", [
+                _c("th", [_vm._v("チェックアウト")]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(_vm.contents.checkout))])
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("p", [
+            _c("button", { on: { click: _vm.closeModal } }, [_vm._v("close")])
+          ])
+        ])
+      ]
+    )
   ])
 }
 var staticRenderFns = [

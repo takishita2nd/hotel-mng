@@ -18,7 +18,7 @@ class RegisterManagementRepository
      */
     public function getList()
     {
-        $select = ['reserve_managements.id as id', 'reserve_managements.name as name', 'address', 'phone', 'num', 'rooms.name as room', 'checkout', 'start_day'];
+        $select = ['reserve_managements.id as id', 'reserve_managements.name as name', 'address', 'phone', 'num', 'rooms.name as room', 'days', 'checkout', 'start_day'];
         return ReserveManagement::select($select)
                                     ->where('lodging', false)
                                     ->orderBy('start_day')
@@ -34,7 +34,7 @@ class RegisterManagementRepository
      */
     public function getListByMonth($year, $month, $room)
     {
-        $select = ['reserve_managements.id as id', 'reserve_managements.name as name', 'address', 'phone', 'num', 'rooms.name as room', 'checkout', 'start_day'];
+        $select = ['reserve_managements.id as id', 'reserve_managements.name as name', 'address', 'phone', 'num', 'rooms.name as room', 'days', 'checkout', 'start_day'];
         return ReserveManagement::select($select)
                                 ->leftJoin('reserve_management_room', 'reserve_managements.id', '=', 'reserve_management_room.reserve_management_id')
                                 ->leftJoin('rooms', 'reserve_management_room.room_id', '=', 'rooms.id')
