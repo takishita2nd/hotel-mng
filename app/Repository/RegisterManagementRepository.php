@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use App\Model\ReserveManagement;
 use App\Model\ReserveDayList;
 use App\Model\Room;
+use Illuminate\Support\Facades\Log;
 
 class RegisterManagementRepository
 {
@@ -18,7 +19,7 @@ class RegisterManagementRepository
      */
     public function getList()
     {
-        $select = ['reserve_managements.id as id', 'reserve_managements.name as name', 'address', 'phone', 'num', 'rooms.name as room', 'days', 'checkout', 'start_day'];
+        $select = ['reserve_managements.id as id', 'reserve_managements.name as name', 'address', 'phone', 'num', 'rooms.id as roomid', 'rooms.name as room', 'days', 'checkout', 'start_day'];
         return ReserveManagement::select($select)
                                     ->where('lodging', false)
                                     ->orderBy('start_day')
@@ -34,7 +35,7 @@ class RegisterManagementRepository
      */
     public function getListByMonth($year, $month, $room)
     {
-        $select = ['reserve_managements.id as id', 'reserve_managements.name as name', 'address', 'phone', 'num', 'rooms.name as room', 'days', 'checkout', 'start_day'];
+        $select = ['reserve_managements.id as id', 'reserve_managements.name as name', 'address', 'phone', 'num', 'rooms.id as roomid', 'rooms.name as room', 'days', 'checkout', 'start_day'];
         return ReserveManagement::select($select)
                                 ->leftJoin('reserve_management_room', 'reserve_managements.id', '=', 'reserve_management_room.reserve_management_id')
                                 ->leftJoin('rooms', 'reserve_management_room.room_id', '=', 'rooms.id')
@@ -193,14 +194,16 @@ class RegisterManagementRepository
     {
         for($i = 0; $i < $num; $i++)
         {
-            $record = ReserveDayList::where(['day' => date('Y-m-d', strtotime($date.'+'.$i.' day'))])->first();
-            if(is_null($record) == false)
+            $records = ReserveDayList::where(['day' => date('Y-m-d', strtotime($date.'+'.$i.' day'))])->first();
+            if(is_null($records) == false)
             {
-                if(is_null($record->reserveManagements()->first()->rooms()->first()) == false)
-                {
-                    if($record->reserveManagements()->first()->rooms()->first()->id == $room)
+                foreach ($records as $record) {
+                    if(is_null($record->reserveManagements()->first()->rooms()->first()) == false)
                     {
-                        return false;
+                        if($record->reserveManagements()->first()->rooms()->first()->id == $room)
+                        {
+                            return false;
+                        }
                     }
                 }
             }
@@ -216,18 +219,28 @@ class RegisterManagementRepository
      */
     public function checkScheduleForUpdate($date, $num, $userId, $room)
     {
+        Log::debug(print_r($date ,true));
+        Log::debug(print_r($num ,true));
+        Log::debug(print_r($userId ,true));
+        Log::debug(print_r($room ,true));
         for($i = 0; $i < $num; $i++)
         {
-            $model2 = ReserveDayList::where(['day' => date('Y-m-d', strtotime($date.'+'.$i.' day'))])->first();
-            if(is_null($model2) == false)
+            $model2s = ReserveDayList::where(['day' => date('Y-m-d', strtotime($date.'+'.$i.' day'))])->get();
+            if(is_null($model2s) == false)
             {
-                if(is_null($model2->reserveManagements()->first()->rooms()->first()) == false)
-                {
-                    if($model2->reserveManagements()->first()->rooms()->first()->id == $room)
+                foreach ($model2s as $model2) {
+                    Log::debug(print_r($model2->id ,true));
+                    Log::debug(print_r($model2->day ,true));
+                    if(is_null($model2->reserveManagements()->first()->rooms()->first()) == false)
                     {
-                        if($model2->reserveManagements()->first()->id != $userId)
+                        if($model2->reserveManagements()->first()->rooms()->first()->id == $room)
                         {
-                            return false;
+                            Log::debug(print_r($model2->reserveManagements()->first()->rooms()->first()->id ,true));
+                            Log::debug(print_r($model2->reserveManagements()->first()->rooms()->first()->name ,true));
+                            if($model2->reserveManagements()->first()->id != $userId)
+                            {
+                                return false;
+                            }
                         }
                     }
                 }

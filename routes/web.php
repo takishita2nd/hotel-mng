@@ -42,3 +42,5 @@ Route::post('/room/delete', 'RoomController@delete');
 
 Route::post('/api/rooms', 'ApiController@rooms');
 Route::post('/api/registers', 'ApiController@registers');
+Route::post('/api/update', 'ApiController@update');
+Route::post('/api/timelist', 'ApiController@timelist');

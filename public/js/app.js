@@ -44800,6 +44800,32 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -44886,10 +44912,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
+            error_message: "",
+            error_flg: false,
+            errors: {},
             selectYear: 2019,
             years: [{ text: '2019', value: 2019 }, { text: '2020', value: 2020 }],
             selectMonth: 1,
             months: [{ text: '1', value: 1 }, { text: '2', value: 2 }, { text: '3', value: 3 }, { text: '4', value: 4 }, { text: '5', value: 5 }, { text: '6', value: 6 }, { text: '7', value: 7 }, { text: '8', value: 8 }, { text: '9', value: 9 }, { text: '10', value: 10 }, { text: '11', value: 11 }, { text: '12', value: 12 }],
+            nums: [{ text: '1', value: 1 }, { text: '2', value: 2 }],
+            timeList: [],
             selectRoom: 0,
             rooms: [],
             result: [],
@@ -44905,16 +44936,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 address: "",
                 phone: "",
                 num: 0,
+                roomid: 0,
                 room: "",
                 days: 0,
                 start_day: "",
                 checkout: ""
-            }
+            },
+            edit_flg: false
         };
     },
 
     created: function created() {
         this.getRooms();
+        this.getTimeList();
     },
     methods: {
         getRooms: function getRooms() {
@@ -44941,6 +44975,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         address: element.address,
                         phone: element.phone,
                         num: element.num,
+                        roomid: element.roomid,
                         room: element.room,
                         days: element.days,
                         start_day: element.start_day,
@@ -44951,13 +44986,54 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 console.log("失敗しました");
             });
         },
+        onClickEdit: function onClickEdit() {
+            var _this = this;
+
+            this.edit_flg = true;
+            var checkoutTime = this.contents.checkout.split(" ")[1];
+            this.timeList.forEach(function (element) {
+                if (checkoutTime == element.value + ":00") {
+                    _this.contents.checkout = element.key;
+                }
+            });
+        },
+        onClickSave: function onClickSave() {
+            var self = this;
+            this.param.year = this.selectYear;
+            this.param.month = this.selectMonth;
+            this.param.room = this.selectRoom;
+            this.param.contents = this.contents;
+            axios.post('/api/update', this.param).then(function (response) {
+                self.registers = [];
+                response.data.registerLists.forEach(function (element) {
+                    self.registers.push({
+                        id: element.id,
+                        name: element.name,
+                        address: element.address,
+                        phone: element.phone,
+                        num: element.num,
+                        roomid: element.roomid,
+                        room: element.room,
+                        days: element.days,
+                        start_day: element.start_day,
+                        checkout: element.checkout
+                    });
+                });
+                self.closeModal();
+            }).catch(function (error) {
+                self.error_flg = true;
+                self.error_message = error.response.data.errors;
+            });
+        },
         openModal: function openModal(id) {
             for (var i = 0; i < this.registers.length; i++) {
                 if (this.registers[i].id == id) {
+                    this.contents.id = this.registers[i].id;
                     this.contents.name = this.registers[i].name;
                     this.contents.address = this.registers[i].address;
                     this.contents.phone = this.registers[i].phone;
                     this.contents.num = this.registers[i].num;
+                    this.contents.roomid = this.registers[i].roomid;
                     this.contents.room = this.registers[i].room;
                     this.contents.days = this.registers[i].days;
                     this.contents.start_day = this.registers[i].start_day;
@@ -44966,9 +45042,47 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 }
             }
             this.showContent = true;
+            this.edit_flg = false;
         },
         closeModal: function closeModal() {
             this.showContent = false;
+            this.edit_flg = false;
+        },
+        getTimeList: function getTimeList() {
+            var self = this;
+            axios.post('/api/timelist').then(function (response) {
+                var _iteratorNormalCompletion = true;
+                var _didIteratorError = false;
+                var _iteratorError = undefined;
+
+                try {
+                    for (var _iterator = Object.entries(response.data.timelist)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                        var _ref = _step.value;
+
+                        var _ref2 = _slicedToArray(_ref, 2);
+
+                        var key = _ref2[0];
+                        var value = _ref2[1];
+
+                        self.timeList.push({ key: key, value: value });
+                    }
+                } catch (err) {
+                    _didIteratorError = true;
+                    _iteratorError = err;
+                } finally {
+                    try {
+                        if (!_iteratorNormalCompletion && _iterator.return) {
+                            _iterator.return();
+                        }
+                    } finally {
+                        if (_didIteratorError) {
+                            throw _iteratorError;
+                        }
+                    }
+                }
+            }).catch(function (error) {
+                console.log("失敗しました");
+            });
         }
     }
 });
@@ -45151,65 +45265,330 @@ var render = function() {
             expression: "showContent"
           }
         ],
-        attrs: { id: "overlay" },
-        on: { click: _vm.closeModal }
+        attrs: { id: "overlay" }
       },
       [
         _c("div", { attrs: { id: "content" } }, [
+          _vm.error_flg == true
+            ? _c("p", { staticClass: "error" }, [
+                _vm._v(_vm._s(_vm.error_message))
+              ])
+            : _vm._e(),
+          _vm._v(" "),
           _c("table", { staticClass: "edit" }, [
             _c("tbody", [
               _c("tr", [
                 _c("th", [_vm._v("名前")]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(_vm.contents.name))])
+                _vm.edit_flg == true
+                  ? _c("td", [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.contents.name,
+                            expression: "contents.name"
+                          }
+                        ],
+                        attrs: { type: "text" },
+                        domProps: { value: _vm.contents.name },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.contents, "name", $event.target.value)
+                          }
+                        }
+                      })
+                    ])
+                  : _c("td", [_vm._v(_vm._s(_vm.contents.name))])
               ]),
               _vm._v(" "),
               _c("tr", [
                 _c("th", [_vm._v("住所")]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(_vm.contents.address))])
+                _vm.edit_flg == true
+                  ? _c("td", [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.contents.address,
+                            expression: "contents.address"
+                          }
+                        ],
+                        attrs: { type: "text" },
+                        domProps: { value: _vm.contents.address },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.contents,
+                              "address",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
+                    ])
+                  : _c("td", [_vm._v(_vm._s(_vm.contents.address))])
               ]),
               _vm._v(" "),
               _c("tr", [
                 _c("th", [_vm._v("電話番号")]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(_vm.contents.phone))])
+                _vm.edit_flg == true
+                  ? _c("td", [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.contents.phone,
+                            expression: "contents.phone"
+                          }
+                        ],
+                        attrs: { type: "text" },
+                        domProps: { value: _vm.contents.phone },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.contents, "phone", $event.target.value)
+                          }
+                        }
+                      })
+                    ])
+                  : _c("td", [_vm._v(_vm._s(_vm.contents.phone))])
               ]),
               _vm._v(" "),
               _c("tr", [
                 _c("th", [_vm._v("人数")]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(_vm.contents.num))])
+                _vm.edit_flg == true
+                  ? _c("td", [
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.contents.num,
+                              expression: "contents.num"
+                            }
+                          ],
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.contents,
+                                "num",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            }
+                          }
+                        },
+                        _vm._l(_vm.nums, function(num) {
+                          return _c(
+                            "option",
+                            { domProps: { value: num.value } },
+                            [_vm._v(_vm._s(num.text))]
+                          )
+                        }),
+                        0
+                      )
+                    ])
+                  : _c("td", [_vm._v(_vm._s(_vm.contents.num))])
               ]),
               _vm._v(" "),
               _c("tr", [
                 _c("th", [_vm._v("宿泊部屋")]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(_vm.contents.room))])
+                _vm.edit_flg == true
+                  ? _c("td", [
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.contents.roomid,
+                              expression: "contents.roomid"
+                            }
+                          ],
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.contents,
+                                "roomid",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            }
+                          }
+                        },
+                        _vm._l(_vm.rooms, function(room) {
+                          return _c(
+                            "option",
+                            { domProps: { value: room.id } },
+                            [_vm._v(_vm._s(room.name))]
+                          )
+                        }),
+                        0
+                      )
+                    ])
+                  : _c("td", [_vm._v(_vm._s(_vm.contents.room))])
               ]),
               _vm._v(" "),
               _c("tr", [
                 _c("th", [_vm._v("宿泊日数")]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(_vm.contents.days))])
+                _vm.edit_flg == true
+                  ? _c("td", [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.contents.days,
+                            expression: "contents.days"
+                          }
+                        ],
+                        attrs: { type: "number" },
+                        domProps: { value: _vm.contents.days },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.contents, "days", $event.target.value)
+                          }
+                        }
+                      })
+                    ])
+                  : _c("td", [_vm._v(_vm._s(_vm.contents.days))])
               ]),
               _vm._v(" "),
               _c("tr", [
                 _c("th", [_vm._v("宿泊日")]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(_vm.contents.start_day))])
+                _vm.edit_flg == true
+                  ? _c("td", [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.contents.start_day,
+                            expression: "contents.start_day"
+                          }
+                        ],
+                        attrs: { type: "date" },
+                        domProps: { value: _vm.contents.start_day },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.contents,
+                              "start_day",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
+                    ])
+                  : _c("td", [_vm._v(_vm._s(_vm.contents.start_day))])
               ]),
               _vm._v(" "),
               _c("tr", [
                 _c("th", [_vm._v("チェックアウト")]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(_vm.contents.checkout))])
+                _vm.edit_flg == true
+                  ? _c("td", [
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.contents.checkout,
+                              expression: "contents.checkout"
+                            }
+                          ],
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.contents,
+                                "checkout",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            }
+                          }
+                        },
+                        _vm._l(_vm.timeList, function(time) {
+                          return _c(
+                            "option",
+                            { domProps: { value: time.key } },
+                            [_vm._v(_vm._s(time.value))]
+                          )
+                        }),
+                        0
+                      )
+                    ])
+                  : _c("td", [_vm._v(_vm._s(_vm.contents.checkout))])
               ])
             ])
           ]),
           _vm._v(" "),
           _c("p", [
-            _c("button", { on: { click: _vm.closeModal } }, [_vm._v("close")])
+            _c("button", { on: { click: _vm.closeModal } }, [_vm._v("close")]),
+            _vm._v(" "),
+            _vm.edit_flg == false
+              ? _c("button", { on: { click: _vm.onClickEdit } }, [
+                  _vm._v("編集")
+                ])
+              : _c("button", { on: { click: _vm.onClickSave } }, [
+                  _vm._v("保存")
+                ])
           ])
         ])
       ]

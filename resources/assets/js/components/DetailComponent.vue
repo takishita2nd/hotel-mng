@@ -36,45 +36,69 @@
                 </tr>
             </tbody>
         </table>
-        <div id="overlay" v-show="showContent" @click="closeModal">
+        <div id="overlay" v-show="showContent">
             <div id="content">
+                <p v-if="error_flg == true" class="error">{{error_message}}</p>
                 <table class="edit">
                     <tbody>
                         <tr>
                             <th>名前</th>
-                            <td>{{ contents.name }}</td>
+                            <td v-if="edit_flg == true"><input type="text" v-model=contents.name /></td>
+                            <td v-else>{{ contents.name }}</td>
                         </tr>
                         <tr>
                             <th>住所</th>
-                            <td>{{ contents.address }}</td>
+                            <td v-if="edit_flg == true"><input type="text" v-model=contents.address /></td>
+                            <td v-else>{{ contents.address }}</td>
                         </tr>
                         <tr>
                             <th>電話番号</th>
-                            <td>{{ contents.phone }}</td>
+                            <td v-if="edit_flg == true"><input type="text" v-model=contents.phone /></td>
+                            <td v-else>{{ contents.phone }}</td>
                         </tr>
                         <tr>
                             <th>人数</th>
-                            <td>{{ contents.num }}</td>
+                            <td v-if="edit_flg == true">
+                                <select v-model=contents.num>
+                                    <option v-for="num in nums" v-bind:value="num.value">{{ num.text }}</option>
+                                </select>
+                            </td>
+                            <td v-else>{{ contents.num }}</td>
                         </tr>
                         <tr>
                             <th>宿泊部屋</th>
-                            <td>{{ contents.room }}</td>
+                            <td v-if="edit_flg == true">
+                                <select v-model="contents.roomid">
+                                    <option v-for="room in rooms" v-bind:value="room.id">{{ room.name }}</option>
+                                </select>
+                            </td>
+                            <td v-else>{{ contents.room }}</td>
                         </tr>
                         <tr>
                             <th>宿泊日数</th>
-                            <td>{{ contents.days }}</td>
+                            <td v-if="edit_flg == true"><input type="number" v-model=contents.days /></td>
+                            <td v-else>{{ contents.days }}</td>
                         </tr>
                         <tr>
                             <th>宿泊日</th>
-                            <td>{{ contents.start_day }}</td>
+                            <td v-if="edit_flg == true"><input type="date" v-model=contents.start_day /></td>
+                            <td v-else>{{ contents.start_day }}</td>
                         </tr>
                         <tr>
                             <th>チェックアウト</th>
-                            <td>{{ contents.checkout }}</td>
+                            <td v-if="edit_flg == true">
+                                <select v-model="contents.checkout">
+                                    <option v-for="time in timeList" v-bind:value="time.key">{{ time.value }}</option>
+                                </select>
+                            <td v-else>{{ contents.checkout }}</td>
                         </tr>
                     </tbody>
                 </table>
-            <p><button @click="closeModal">close</button></p>
+            <p>
+                <button @click="closeModal">close</button>
+                <button v-if="edit_flg == false" @click="onClickEdit">編集</button>
+                <button v-else @click="onClickSave">保存</button>
+            </p>
             </div>
         </div>
     </div>
@@ -84,6 +108,9 @@
     export default {
         data() {
             return {
+                error_message: "",
+                error_flg:false,
+                errors: {},
                 selectYear: 2019,
                 years:[ 
                     {text:'2019',value:2019},
@@ -104,6 +131,11 @@
                     {text:'11',value:11},
                     {text:'12',value:12},
                 ],
+                nums: [
+                    {text:'1', value:1},
+                    {text:'2', value:2}
+                ],
+                timeList:[],
                 selectRoom: 0,
                 rooms: [],
                 result: [],
@@ -119,15 +151,18 @@
                     address: "",
                     phone: "",
                     num: 0,
+                    roomid: 0,
                     room: "",
                     days: 0,
                     start_day: "",
                     checkout: "",
-                }
+                },
+                edit_flg: false
             }
         },
         created: function() {
             this.getRooms();
+            this.getTimeList();
         },
         methods: {
             getRooms: function() {
@@ -155,6 +190,7 @@
                                 address:element.address,
                                 phone:element.phone,
                                 num:element.num,
+                                roomid:element.roomid,
                                 room:element.room,
                                 days:element.days,
                                 start_day:element.start_day, 
@@ -166,13 +202,54 @@
                     console.log("失敗しました");
                 });
             },
+            onClickEdit: function(){
+                this.edit_flg = true;
+                var checkoutTime = this.contents.checkout.split(" ")[1];
+                this.timeList.forEach(element => {
+                    if(checkoutTime == element.value+":00"){
+                        this.contents.checkout = element.key;
+                    }
+                });
+            },
+            onClickSave: function(){
+                var self = this;
+                this.param.year = this.selectYear;
+                this.param.month = this.selectMonth;
+                this.param.room = this.selectRoom;
+                this.param.contents = this.contents;
+                axios.post('/api/update', this.param).then(function(response){
+                    self.registers = [];
+                    response.data.registerLists.forEach(element => {
+                        self.registers.push(
+                            {
+                                id:element.id, 
+                                name:element.name,
+                                address:element.address,
+                                phone:element.phone,
+                                num:element.num,
+                                roomid:element.roomid,
+                                room:element.room,
+                                days:element.days,
+                                start_day:element.start_day, 
+                                checkout:element.checkout
+                            }
+                        );
+                    });
+                    self.closeModal();
+                }).catch(function(error){
+                    self.error_flg = true;
+                    self.error_message = error.response.data.errors;
+                });
+            },
             openModal: function(id){
                 for(var i = 0; i< this.registers.length; i++){
                     if(this.registers[i].id == id){
+                        this.contents.id = this.registers[i].id;
                         this.contents.name = this.registers[i].name;
                         this.contents.address = this.registers[i].address;
                         this.contents.phone = this.registers[i].phone;
                         this.contents.num = this.registers[i].num;
+                        this.contents.roomid = this.registers[i].roomid;
                         this.contents.room = this.registers[i].room;
                         this.contents.days = this.registers[i].days;
                         this.contents.start_day = this.registers[i].start_day;
@@ -180,10 +257,22 @@
                         break;
                     }
                 }
-                this.showContent = true
+                this.showContent = true;
+                this.edit_flg = false;
             },
             closeModal: function(){
-                this.showContent = false
+                this.showContent = false;
+                this.edit_flg = false;
+            },
+            getTimeList: function(){
+                var self = this;
+                axios.post('/api/timelist').then(function(response){
+                    for (let [key, value] of Object.entries(response.data.timelist)){
+                        self.timeList.push({key: key, value: value});
+                    }
+                }).catch(function(error){
+                    console.log("失敗しました");
+                });
             }
         }
     }
