@@ -98,6 +98,7 @@
                 <button @click="closeModal">close</button>
                 <button v-if="edit_flg == false" @click="onClickEdit">編集</button>
                 <button v-else @click="onClickSave">保存</button>
+                <button v-if="edit_flg == false" @click="onClickDelete">削除</button>
             </p>
             </div>
         </div>
@@ -147,6 +148,7 @@
                 registers: [],
                 showContent: false,
                 contents: {
+                    id: 0,
                     name: "",
                     address: "",
                     phone: "",
@@ -182,22 +184,7 @@
                 this.param.room = this.selectRoom;
                 axios.post('/api/registers', this.param).then(function(response){
                     self.registers = [];
-                    response.data.registerLists.forEach(element => {
-                        self.registers.push(
-                            {
-                                id:element.id, 
-                                name:element.name,
-                                address:element.address,
-                                phone:element.phone,
-                                num:element.num,
-                                roomid:element.roomid,
-                                room:element.room,
-                                days:element.days,
-                                start_day:element.start_day, 
-                                checkout:element.checkout
-                            }
-                        );
-                    });
+                    self.updateRegisters(self, response.data.registerLists);
                 }).catch(function(error){
                     console.log("失敗しました");
                 });
@@ -219,22 +206,22 @@
                 this.param.contents = this.contents;
                 axios.post('/api/update', this.param).then(function(response){
                     self.registers = [];
-                    response.data.registerLists.forEach(element => {
-                        self.registers.push(
-                            {
-                                id:element.id, 
-                                name:element.name,
-                                address:element.address,
-                                phone:element.phone,
-                                num:element.num,
-                                roomid:element.roomid,
-                                room:element.room,
-                                days:element.days,
-                                start_day:element.start_day, 
-                                checkout:element.checkout
-                            }
-                        );
-                    });
+                    self.updateRegisters(self, response.data.registerLists);
+                    self.closeModal();
+                }).catch(function(error){
+                    self.error_flg = true;
+                    self.error_message = error.response.data.errors;
+                });
+            },
+            onClickDelete: function() {
+                var self = this;
+                this.param.year = this.selectYear;
+                this.param.month = this.selectMonth;
+                this.param.room = this.selectRoom;
+                this.param.id = this.contents.id;
+                axios.post('/api/delete', this.param).then(function(response){
+                    self.registers = [];
+                    self.updateRegisters(self, response.data.registerLists);
                     self.closeModal();
                 }).catch(function(error){
                     self.error_flg = true;
@@ -272,6 +259,24 @@
                     }
                 }).catch(function(error){
                     console.log("失敗しました");
+                });
+            },
+            updateRegisters: function(self, registerLists){
+                registerLists.forEach(element => {
+                    self.registers.push(
+                        {
+                            id:element.id, 
+                            name:element.name,
+                            address:element.address,
+                            phone:element.phone,
+                            num:element.num,
+                            roomid:element.roomid,
+                            room:element.room,
+                            days:element.days,
+                            start_day:element.start_day, 
+                            checkout:element.checkout
+                        }
+                    );
                 });
             }
         }

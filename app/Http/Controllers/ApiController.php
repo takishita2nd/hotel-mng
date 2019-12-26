@@ -66,4 +66,14 @@ class ApiController extends Controller
             $request->room
         )]);
     }
+
+    public function delete(Request $request)
+    {
+        $this->registerManagement->deleteById($request->id);
+        return response()->json(['registerLists' => $this->registerManagement->getListByMonth(
+            $request->year,
+            $request->month,
+            $request->room
+        )]);
+    }
 }

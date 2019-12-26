@@ -44908,6 +44908,7 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -44932,6 +44933,7 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
             registers: [],
             showContent: false,
             contents: {
+                id: 0,
                 name: "",
                 address: "",
                 phone: "",
@@ -44968,20 +44970,7 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
             this.param.room = this.selectRoom;
             axios.post('/api/registers', this.param).then(function (response) {
                 self.registers = [];
-                response.data.registerLists.forEach(function (element) {
-                    self.registers.push({
-                        id: element.id,
-                        name: element.name,
-                        address: element.address,
-                        phone: element.phone,
-                        num: element.num,
-                        roomid: element.roomid,
-                        room: element.room,
-                        days: element.days,
-                        start_day: element.start_day,
-                        checkout: element.checkout
-                    });
-                });
+                self.updateRegisters(self, response.data.registerLists);
             }).catch(function (error) {
                 console.log("失敗しました");
             });
@@ -45005,20 +44994,22 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
             this.param.contents = this.contents;
             axios.post('/api/update', this.param).then(function (response) {
                 self.registers = [];
-                response.data.registerLists.forEach(function (element) {
-                    self.registers.push({
-                        id: element.id,
-                        name: element.name,
-                        address: element.address,
-                        phone: element.phone,
-                        num: element.num,
-                        roomid: element.roomid,
-                        room: element.room,
-                        days: element.days,
-                        start_day: element.start_day,
-                        checkout: element.checkout
-                    });
-                });
+                self.updateRegisters(self, response.data.registerLists);
+                self.closeModal();
+            }).catch(function (error) {
+                self.error_flg = true;
+                self.error_message = error.response.data.errors;
+            });
+        },
+        onClickDelete: function onClickDelete() {
+            var self = this;
+            this.param.year = this.selectYear;
+            this.param.month = this.selectMonth;
+            this.param.room = this.selectRoom;
+            this.param.id = this.contents.id;
+            axios.post('/api/delete', this.param).then(function (response) {
+                self.registers = [];
+                self.updateRegisters(self, response.data.registerLists);
                 self.closeModal();
             }).catch(function (error) {
                 self.error_flg = true;
@@ -45082,6 +45073,22 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
                 }
             }).catch(function (error) {
                 console.log("失敗しました");
+            });
+        },
+        updateRegisters: function updateRegisters(self, registerLists) {
+            registerLists.forEach(function (element) {
+                self.registers.push({
+                    id: element.id,
+                    name: element.name,
+                    address: element.address,
+                    phone: element.phone,
+                    num: element.num,
+                    roomid: element.roomid,
+                    room: element.room,
+                    days: element.days,
+                    start_day: element.start_day,
+                    checkout: element.checkout
+                });
             });
         }
     }
@@ -45588,7 +45595,13 @@ var render = function() {
                 ])
               : _c("button", { on: { click: _vm.onClickSave } }, [
                   _vm._v("保存")
+                ]),
+            _vm._v(" "),
+            _vm.edit_flg == false
+              ? _c("button", { on: { click: _vm.onClickDelete } }, [
+                  _vm._v("削除")
                 ])
+              : _vm._e()
           ])
         ])
       ]
