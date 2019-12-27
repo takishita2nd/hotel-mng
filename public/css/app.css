@@ -8428,7 +8428,7 @@ table.edit tbody tr td {
 }
 
 table.schedule {
-  width: 50%;
+  width: 100%;
 }
 
 table.schedule tbody tr th {
@@ -8518,6 +8518,36 @@ table.total tbody tr .count {
 
 table.total tbody tr .total {
   width: 30%;
+}
+
+table.checkout {
+  width: 100%;
+}
+
+table.checkout tbody tr th {
+  border: solid;
+  border-width: thin;
+}
+
+table.checkout tbody tr .name {
+  width: 50%;
+}
+
+table.checkout tbody tr .time {
+  width: 50%;
+}
+
+table.checkout tbody tr td {
+  border: solid;
+  border-width: thin;
+}
+
+table.checkout tbody tr .name {
+  width: 50%;
+}
+
+table.checkout tbody tr .time {
+  width: 50%;
 }
 
 #overlay {

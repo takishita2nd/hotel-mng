@@ -31,6 +31,7 @@ Route::get('/management/schedule', 'RegisterManagementController@schedule');
 Route::post('/management/schedule', 'RegisterManagementController@scheduleToMonthly');
 Route::get('/management/total', 'RegisterManagementController@total');
 Route::post('/management/total', 'RegisterManagementController@totalToMonthly');
+Route::get('/management/checkout', 'RegisterManagementController@checkout');
 
 Route::get('/room', 'RoomController@index');
 Route::get('/room/create', 'RoomController@create');

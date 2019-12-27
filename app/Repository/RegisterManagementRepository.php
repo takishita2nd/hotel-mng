@@ -12,6 +12,11 @@ class RegisterManagementRepository
 {
     private $paramNames = ['name', 'address', 'phone', 'num', 'days', 'start_day', 'lodging', 'checkout'];
 
+    public function __construct()
+    {
+
+    }
+
     /**
      * 予約一覧を取得する
      * 
@@ -194,15 +199,18 @@ class RegisterManagementRepository
     {
         for($i = 0; $i < $num; $i++)
         {
-            $records = ReserveDayList::where(['day' => date('Y-m-d', strtotime($date.'+'.$i.' day'))])->first();
+            $records = ReserveDayList::where(['day' => date('Y-m-d', strtotime($date.'+'.$i.' day'))])->get();
             if(is_null($records) == false)
             {
                 foreach ($records as $record) {
-                    if(is_null($record->reserveManagements()->first()->rooms()->first()) == false)
+                    if(is_null($record->reserveManagements()->first()) == false)
                     {
-                        if($record->reserveManagements()->first()->rooms()->first()->id == $room)
+                        if(is_null($record->reserveManagements()->first()->rooms()->first()) == false)
                         {
-                            return false;
+                            if($record->reserveManagements()->first()->rooms()->first()->id == $room)
+                            {
+                                return false;
+                            }
                         }
                     }
                 }
@@ -277,6 +285,27 @@ class RegisterManagementRepository
             $index++;
         }
 
+        return $ret;
+    }
+
+    public function getCheckoutList()
+    {
+        $ret = array();
+        $index = 0;
+        $checkout = ReserveManagement::select('rooms.name as roomname', 'checkout')
+                                    ->leftJoin('reserve_management_room', 'reserve_managements.id', '=', 'reserve_management_room.reserve_management_id')
+                                    ->leftJoin('rooms', 'reserve_management_room.room_id', '=', 'rooms.id')
+                                    ->get();
+        date_default_timezone_set('Asia/Tokyo');
+        $today = date("Y-m-d");
+        foreach ($checkout as $value) {
+            $str = explode(" ", $value->checkout);
+            if($today == $str[0]) {
+                $value->checkout = $str[1];
+                $ret[$index] = $value;
+                $index++;
+            }
+        }
         return $ret;
     }
 

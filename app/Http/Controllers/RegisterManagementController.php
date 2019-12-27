@@ -245,4 +245,15 @@ class RegisterManagementController extends Controller
     {
         return redirect('management/total?room='.$request->room);
     }
+
+    /**
+     * 当日のチェックアウト時刻一覧を表示
+     */
+    public function checkout(Request $request)
+    {
+        return view('register.checkout',
+                        [
+                            'Lists' => $this->registerManagement->getCheckoutList()
+                        ]);
+    }
 }

@@ -75,7 +75,7 @@ table.edit{
     }
 }
 table.schedule{
-    width: 50%;
+    width: 100%;
     tbody tr{
         th {
             border: solid;
@@ -146,6 +146,31 @@ table.total{
         }
         .total {
             width: 30%;
+        }
+    }
+}
+table.checkout{
+    width: 100%;
+    tbody tr{
+        th {
+            border: solid;
+            border-width: thin;
+        }
+        .name {
+            width: 50%;
+        }
+        .time {
+            width: 50%;
+        }
+        td {
+            border: solid;
+            border-width: thin;
+        }
+        .name {
+            width: 50%;
+        }
+        .time {
+            width: 50%;
         }
     }
 }
