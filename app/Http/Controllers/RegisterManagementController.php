@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use App\Repository\RegisterManagementRepository;
 use App\Repository\RoomRepository;
 use App\Http\Requests\ManagementRequest;
@@ -32,6 +33,7 @@ class RegisterManagementController extends Controller
      */
     public function index(Request $request)
     {
+        Log::debug(Auth::user());
         if(is_null($request->input('year')) || is_null($request->input('month')) || is_null($request->input('room')))
         {
             return view('register.index', 
