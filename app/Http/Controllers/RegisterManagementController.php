@@ -75,6 +75,7 @@ class RegisterManagementController extends Controller
     {
         return view('register.create',
                     [
+                        'user' => Auth::user(),
                         'rooms' => $this->roomRepository->getRoomList(),
                         'timelist' => $this->registerManagement->getTimeList()
                     ]
@@ -96,15 +97,12 @@ class RegisterManagementController extends Controller
         }
         $param = $this->registerManagement->getParam();
         $this->registerManagement->add([
-            $param[0] => $request->name,
-            $param[1] => $request->address,
-            $param[2] => $request->phone,
-            $param[3] => $request->num,
-            $param[4] => $request->days,
-            $param[5] => $request->start_day,
-            $param[6] => false,
-            $param[7] => date('Y-m-d H:i', strtotime($request->start_day.'+'.$request->days.' day') + $request->checkout)
-        ], $request->room);
+            $param[0] => $request->num,
+            $param[1] => $request->days,
+            $param[2] => $request->start_day,
+            $param[3] => false,
+            $param[4] => date('Y-m-d H:i', strtotime($request->start_day.'+'.$request->days.' day') + $request->checkout)
+        ], $request->room, Auth::user());
         return redirect('management');
     }
 

@@ -17,4 +17,9 @@ class ReserveManagement extends Model
     {
         return $this->belongsToMany('App\Model\Room');
     }
+
+    public function users()
+    {
+        return $this->belongsToMany('App\User');
+    }
 }

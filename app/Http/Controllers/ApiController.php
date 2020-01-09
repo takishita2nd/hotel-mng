@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Repository\RegisterManagementRepository;
 use App\Repository\RoomRepository;
 use Illuminate\Support\Facades\Log;
@@ -26,7 +27,8 @@ class ApiController extends Controller
         return response()->json(['registerLists' => $this->registerManagement->getListByMonth(
             $request->year,
             $request->month,
-            $request->room
+            $request->room,
+            Auth::user()->id
         )]);
     }
 

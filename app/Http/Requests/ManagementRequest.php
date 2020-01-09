@@ -24,9 +24,6 @@ class ManagementRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string',
-            'address' => 'required|string',
-            'phone' => 'required|digits:11',
             'num' => 'required|numeric|digits_between:1,2',
             'room' => 'required|numeric',
             'days' => 'required|numeric|digits_between:1,4',

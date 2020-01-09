@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 
 class RegisterManagementRepository
 {
-    private $paramNames = ['name', 'address', 'phone', 'num', 'days', 'start_day', 'lodging', 'checkout'];
+    private $paramNames = ['num', 'days', 'start_day', 'lodging', 'checkout'];
 
     public function __construct()
     {
@@ -24,7 +24,7 @@ class RegisterManagementRepository
      */
     public function getList()
     {
-        $select = ['reserve_managements.id as id', 'reserve_managements.name as name', 'address', 'phone', 'num', 'rooms.id as roomid', 'rooms.name as room', 'days', 'checkout', 'start_day'];
+        $select = ['reserve_managements.id as id', 'num', 'rooms.id as roomid', 'rooms.name as room', 'days', 'checkout', 'start_day'];
         return ReserveManagement::select($select)
                                     ->where('lodging', false)
                                     ->orderBy('start_day')
@@ -38,16 +38,19 @@ class RegisterManagementRepository
      * 
      * @return ReserveManagement[]
      */
-    public function getListByMonth($year, $month, $room)
+    public function getListByMonth($year, $month, $room, $userId)
     {
-        $select = ['reserve_managements.id as id', 'reserve_managements.name as name', 'address', 'phone', 'num', 'rooms.id as roomid', 'rooms.name as room', 'days', 'checkout', 'start_day'];
+        $select = ['reserve_managements.id as id', 'users.name as name', 'users.address as address', 'users.phone as phone', 'num', 'rooms.id as roomid', 'rooms.name as room', 'days', 'checkout', 'start_day'];
         return ReserveManagement::select($select)
                                 ->leftJoin('reserve_management_room', 'reserve_managements.id', '=', 'reserve_management_room.reserve_management_id')
                                 ->leftJoin('rooms', 'reserve_management_room.room_id', '=', 'rooms.id')
+                                ->leftJoin('reserve_management_user', 'reserve_managements.id', '=', 'reserve_management_user.reserve_management_id')
+                                ->leftJoin('users', 'reserve_management_user.user_id', '=', 'users.id')
                                 ->where('start_day', '>=', date('Y-m-d', strtotime('first day of '.$year.'-'.$month)))
                                 ->where('start_day', '<=', date('Y-m-d', strtotime('last day of '.$year.'-'.$month)))
                                 ->where('reserve_management_room.room_id', $room)
                                 ->where('lodging', false)
+                                ->where('users.id', $userId)
                                 ->orderBy('start_day')
                                 ->get();
     }
@@ -72,7 +75,7 @@ class RegisterManagementRepository
      * 
      * @return void
      */
-    public function add($param, $room)
+    public function add($param, $room, $user)
     {
         $model = new ReserveManagement;
         foreach($this->paramNames as $name)
@@ -82,6 +85,7 @@ class RegisterManagementRepository
         $model->save();
         $this->attachToRoom($model, $room);
         $this->attachToSchedule($model);
+        $this->attachToUser($model, $user);
     }
 
     /**
@@ -350,6 +354,16 @@ class RegisterManagementRepository
     {
         $model3 = Room::where('id', $room)->first();
         $model->rooms()->detach($model3);
+    }
+
+    public function attachToUser($model, $user)
+    {
+        $model->users()->attach($user);
+    }
+
+    public function detachToUser($model, $user)
+    {
+        $model->users()->detach($user);
     }
 
     public function getParam()

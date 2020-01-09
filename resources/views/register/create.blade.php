@@ -26,15 +26,15 @@
                 <table class="edit">
                     <tr>
                         <th>名前</th>
-                        <td>{!! Form::text('name') !!}</td>
+                        <td>{!! $user->name !!}</td>
                     </tr>
                     <tr>
                         <th>住所</th>
-                        <td>{!! Form::text('address') !!}</td>
+                        <td>{!! $user->address !!}</td>
                     </tr>
                     <tr>
                         <th>電話番号</th>
-                        <td>{!! Form::text('phone') !!}</td>
+                        <td>{!! $user->phone !!}</td>
                     </tr>
                     <tr>
                         <th>人数</th>
