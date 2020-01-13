@@ -43,18 +43,15 @@
                     <tbody>
                         <tr>
                             <th>名前</th>
-                            <td v-if="edit_flg == true"><input type="text" v-model=contents.name /></td>
-                            <td v-else>{{ contents.name }}</td>
+                            <td>{{ contents.name }}</td>
                         </tr>
                         <tr>
                             <th>住所</th>
-                            <td v-if="edit_flg == true"><input type="text" v-model=contents.address /></td>
-                            <td v-else>{{ contents.address }}</td>
+                            <td>{{ contents.address }}</td>
                         </tr>
                         <tr>
                             <th>電話番号</th>
-                            <td v-if="edit_flg == true"><input type="text" v-model=contents.phone /></td>
-                            <td v-else>{{ contents.phone }}</td>
+                            <td>{{ contents.phone }}</td>
                         </tr>
                         <tr>
                             <th>人数</th>

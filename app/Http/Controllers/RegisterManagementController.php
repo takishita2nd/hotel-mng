@@ -49,7 +49,8 @@ class RegisterManagementController extends Controller
                 [
                     'registerLists' => $this->registerManagement->getListByMonth($request->input('year'), 
                                                                                 $request->input('month'), 
-                                                                                $request->input('room')),
+                                                                                $request->input('room'),
+                                                                                Auth::id()),
                     'rooms' => $this->roomRepository->getRoomList()
                 ]
             );

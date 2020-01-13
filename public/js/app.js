@@ -44906,9 +44906,6 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 //
 //
 //
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -45287,92 +45284,19 @@ var render = function() {
               _c("tr", [
                 _c("th", [_vm._v("名前")]),
                 _vm._v(" "),
-                _vm.edit_flg == true
-                  ? _c("td", [
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.contents.name,
-                            expression: "contents.name"
-                          }
-                        ],
-                        attrs: { type: "text" },
-                        domProps: { value: _vm.contents.name },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(_vm.contents, "name", $event.target.value)
-                          }
-                        }
-                      })
-                    ])
-                  : _c("td", [_vm._v(_vm._s(_vm.contents.name))])
+                _c("td", [_vm._v(_vm._s(_vm.contents.name))])
               ]),
               _vm._v(" "),
               _c("tr", [
                 _c("th", [_vm._v("住所")]),
                 _vm._v(" "),
-                _vm.edit_flg == true
-                  ? _c("td", [
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.contents.address,
-                            expression: "contents.address"
-                          }
-                        ],
-                        attrs: { type: "text" },
-                        domProps: { value: _vm.contents.address },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(
-                              _vm.contents,
-                              "address",
-                              $event.target.value
-                            )
-                          }
-                        }
-                      })
-                    ])
-                  : _c("td", [_vm._v(_vm._s(_vm.contents.address))])
+                _c("td", [_vm._v(_vm._s(_vm.contents.address))])
               ]),
               _vm._v(" "),
               _c("tr", [
                 _c("th", [_vm._v("電話番号")]),
                 _vm._v(" "),
-                _vm.edit_flg == true
-                  ? _c("td", [
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.contents.phone,
-                            expression: "contents.phone"
-                          }
-                        ],
-                        attrs: { type: "text" },
-                        domProps: { value: _vm.contents.phone },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(_vm.contents, "phone", $event.target.value)
-                          }
-                        }
-                      })
-                    ])
-                  : _c("td", [_vm._v(_vm._s(_vm.contents.phone))])
+                _c("td", [_vm._v(_vm._s(_vm.contents.phone))])
               ]),
               _vm._v(" "),
               _c("tr", [

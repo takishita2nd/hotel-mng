@@ -112,9 +112,10 @@ class RegisterManagementRepository
      * 
      * @return void
      */
-    public function deleteById($id)
+    public function deleteById($id, $user)
     {
         $model = $this->getItemById($id);
+        $this->detachToUser($model, $user);
         $this->detachToRoom($model, $model->rooms()->first()->id);
         $this->detachToSchedule($model);
         $model->delete();
@@ -294,7 +295,6 @@ class RegisterManagementRepository
 
     public function getCheckoutList()
     {
-        date_default_timezone_set('Asia/Tokyo');
         $today = date("Y-m-d 00:00:00");
         $tomorrow = date("Y-m-d 00:00:00", strtotime("tomorrow"));
         return ReserveManagement::select('rooms.name as roomname', 'checkout')
@@ -314,7 +314,7 @@ class RegisterManagementRepository
         for($i = 0; $i < 48; $i++)
         {
             $time = strtotime('00:00 + '.($i * 30).' minute') - strtotime('00:00');
-            $ret[$time] = date('H:i', $time);
+            $ret[$time] = date('H:i', $time + strtotime('00:00 + 15 hours') - strtotime('00:00'));
         }
         return $ret;
     }

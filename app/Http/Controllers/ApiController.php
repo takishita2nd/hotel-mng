@@ -53,29 +53,28 @@ class ApiController extends Controller
         $param = $this->registerManagement->getParam();
         $this->registerManagement->updateById($request->contents["id"],
         [
-            $param[0] => $request->contents["name"],
-            $param[1] => $request->contents["address"],
-            $param[2] => $request->contents["phone"],
-            $param[3] => $request->contents["num"],
-            $param[4] => $request->contents["days"],
-            $param[5] => $request->contents["start_day"],
-            $param[6] => false,
-            $param[7] => date('Y-m-d H:i', strtotime($request->contents["start_day"].' + '.$request->contents["days"].' day') + $request->contents["checkout"])
+            $param[0] => $request->contents["num"],
+            $param[1] => $request->contents["days"],
+            $param[2] => $request->contents["start_day"],
+            $param[3] => false,
+            $param[4] => date('Y-m-d H:i', strtotime($request->contents["start_day"].' + '.$request->contents["days"].' day') + $request->contents["checkout"])
         ], $request->contents["roomid"]);
         return response()->json(['registerLists' => $this->registerManagement->getListByMonth(
             $request->year,
             $request->month,
-            $request->room
+            $request->room,
+            Auth::id()
         )]);
     }
 
     public function delete(Request $request)
     {
-        $this->registerManagement->deleteById($request->id);
+        $this->registerManagement->deleteById($request->id, Auth::user());
         return response()->json(['registerLists' => $this->registerManagement->getListByMonth(
             $request->year,
             $request->month,
-            $request->room
+            $request->room,
+            Auth::user()
         )]);
     }
 }
