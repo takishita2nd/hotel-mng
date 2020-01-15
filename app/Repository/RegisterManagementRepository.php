@@ -143,24 +143,15 @@ class RegisterManagementRepository
     {
         $lists = array();
         $index = 0;
-        $models = ReserveDayList::orderBy('day')
-                                    ->get();
-        foreach($models as $model)
-        {
-            $room = null;
-            if(is_null($model->reserveManagements()->first()->rooms()->first()) == false)
-            {
-                $room = $model->reserveManagements()->first()->rooms()->first()->name;
-            }
-            $lists[$index] = array(
-                                'day' => $model->day,
-                                'name' => $model->reserveManagements()->first()->name,
-                                'room' => $room,
-                                'lodging' => $model->reserveManagements()->first()->lodging
-                            );
-            $index++;
-        }
-        return $lists;
+        return ReserveDayList::select('day', 'users.name as name', 'rooms.name as room', 'lodging')
+                                ->leftJoin('reserve_day_list_reserve_management', 'reserve_day_lists.id', '=', 'reserve_day_list_reserve_management.reserve_day_list_id')
+                                ->leftJoin('reserve_managements', 'reserve_day_list_reserve_management.reserve_management_id', '=', 'reserve_managements.id')
+                                ->leftJoin('reserve_management_room', 'reserve_managements.id', '=', 'reserve_management_room.reserve_management_id')
+                                ->leftJoin('rooms', 'reserve_management_room.room_id', '=', 'rooms.id')
+                                ->leftJoin('reserve_management_user', 'reserve_management_user.reserve_management_id', '=', 'reserve_managements.id')
+                                ->leftJoin('users', 'reserve_management_user.user_id', '=', 'users.id')
+                                ->orderBy('day')
+                                ->get();
     }
 
     /**
@@ -168,11 +159,13 @@ class RegisterManagementRepository
      */
     public function getScheduleByMonth($year, $month, $room)
     {
-        return ReserveDayList::select('day', 'reserve_managements.name as name', 'rooms.name as room', 'lodging')
+        return ReserveDayList::select('day', 'users.name as name', 'rooms.name as room', 'lodging')
                                 ->leftJoin('reserve_day_list_reserve_management', 'reserve_day_lists.id', '=', 'reserve_day_list_reserve_management.reserve_day_list_id')
                                 ->leftJoin('reserve_managements', 'reserve_day_list_reserve_management.reserve_management_id', '=', 'reserve_managements.id')
                                 ->leftJoin('reserve_management_room', 'reserve_managements.id', '=', 'reserve_management_room.reserve_management_id')
                                 ->leftJoin('rooms', 'reserve_management_room.room_id', '=', 'rooms.id')
+                                ->leftJoin('reserve_management_user', 'reserve_management_user.reserve_management_id', '=', 'reserve_managements.id')
+                                ->leftJoin('users', 'reserve_management_user.user_id', '=', 'users.id')
                                 ->where('day', '>=', date('Y-m-d', strtotime('first day of '.$year.'-'.$month)))
                                 ->where('day', '<=', date('Y-m-d', strtotime('last day of '.$year.'-'.$month)))
                                 ->where('rooms.id', $room)
