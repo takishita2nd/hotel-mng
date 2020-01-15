@@ -87,6 +87,7 @@
                                 <select v-model="contents.checkout">
                                     <option v-for="time in timeList" v-bind:value="time.key">{{ time.value }}</option>
                                 </select>
+                            </td>
                             <td v-else>{{ contents.checkout }}</td>
                         </tr>
                     </tbody>

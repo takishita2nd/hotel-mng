@@ -3,10 +3,12 @@
 namespace App\Repository;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Gate;
 use App\Model\ReserveManagement;
 use App\Model\ReserveDayList;
 use App\Model\Room;
-use Illuminate\Support\Facades\Log;
+use App\User;
 
 class RegisterManagementRepository
 {
@@ -41,7 +43,7 @@ class RegisterManagementRepository
     public function getListByMonth($year, $month, $room, $userId)
     {
         $select = ['reserve_managements.id as id', 'users.name as name', 'users.address as address', 'users.phone as phone', 'num', 'rooms.id as roomid', 'rooms.name as room', 'days', 'checkout', 'start_day'];
-        return ReserveManagement::select($select)
+        $query = ReserveManagement::select($select)
                                 ->leftJoin('reserve_management_room', 'reserve_managements.id', '=', 'reserve_management_room.reserve_management_id')
                                 ->leftJoin('rooms', 'reserve_management_room.room_id', '=', 'rooms.id')
                                 ->leftJoin('reserve_management_user', 'reserve_managements.id', '=', 'reserve_management_user.reserve_management_id')
@@ -49,10 +51,12 @@ class RegisterManagementRepository
                                 ->where('start_day', '>=', date('Y-m-d', strtotime('first day of '.$year.'-'.$month)))
                                 ->where('start_day', '<=', date('Y-m-d', strtotime('last day of '.$year.'-'.$month)))
                                 ->where('reserve_management_room.room_id', $room)
-                                ->where('lodging', false)
-                                ->where('users.id', $userId)
-                                ->orderBy('start_day')
-                                ->get();
+                                ->where('lodging', false);
+        if(Gate::denies('manager')){
+            $query = $query->where('users.id', $userId);
+        }
+        $query = $query->orderBy('start_day');
+        return $query->get();
     }
 
     /**
@@ -77,6 +81,7 @@ class RegisterManagementRepository
      */
     public function add($param, $room, $user)
     {
+        Log::debug(print_r($param ,true));
         $model = new ReserveManagement;
         foreach($this->paramNames as $name)
         {

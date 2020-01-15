@@ -46,3 +46,6 @@ Route::post('/api/update', 'ApiController@update');
 Route::post('/api/delete', 'ApiController@delete');
 Route::post('/api/registers', 'ApiController@registers');
 Route::post('/api/timelist', 'ApiController@timelist');
+Route::post('/api/role', 'ApiController@role');
+Route::post('/api/users', 'ApiController@users');
+Route::post('/api/add', 'ApiController@add');
