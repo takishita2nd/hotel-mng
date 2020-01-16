@@ -97,6 +97,7 @@
                 <button v-if="edit_flg == false" @click="onClickEdit">編集</button>
                 <button v-else @click="onClickSave">保存</button>
                 <button v-if="edit_flg == false" @click="onClickDelete">削除</button>
+                <button v-if="role == true && edit_flg == false" @click="onClickCheck">チェック</button>
             </p>
             </div>
         </div>
@@ -107,6 +108,7 @@
     export default {
         data() {
             return {
+                role: false,
                 error_message: "",
                 error_flg:false,
                 errors: {},
@@ -161,10 +163,19 @@
             }
         },
         created: function() {
+            this.getRole();
             this.getRooms();
             this.getTimeList();
         },
         methods: {
+            getRole: function() {
+                var self = this;
+                axios.post('/api/role').then(function(response){
+                    self.role = response.data.role;
+                }).catch(function(error){
+                    console.log("失敗しました");
+                });
+            },
             getRooms: function() {
                 var self = this;
                 axios.post('/api/rooms').then(function(response){
@@ -218,6 +229,21 @@
                 this.param.room = this.selectRoom;
                 this.param.id = this.contents.id;
                 axios.post('/api/delete', this.param).then(function(response){
+                    self.registers = [];
+                    self.updateRegisters(self, response.data.registerLists);
+                    self.closeModal();
+                }).catch(function(error){
+                    self.error_flg = true;
+                    self.error_message = error.response.data.errors;
+                });
+            },
+            onClickCheck: function() {
+                var self = this;
+                this.param.year = this.selectYear;
+                this.param.month = this.selectMonth;
+                this.param.room = this.selectRoom;
+                this.param.id = this.contents.id;
+                axios.post('/api/check', this.param).then(function(response){
                     self.registers = [];
                     self.updateRegisters(self, response.data.registerLists);
                     self.closeModal();

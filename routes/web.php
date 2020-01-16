@@ -49,3 +49,4 @@ Route::post('/api/timelist', 'ApiController@timelist');
 Route::post('/api/role', 'ApiController@role');
 Route::post('/api/users', 'ApiController@users');
 Route::post('/api/add', 'ApiController@add');
+Route::post('/api/check', 'ApiController@check');

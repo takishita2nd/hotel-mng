@@ -81,6 +81,17 @@ class ApiController extends Controller
         )]);
     }
 
+    public function check(Request $request)
+    {
+        $this->registerManagement->lodging($request->id);
+        return response()->json(['registerLists' => $this->registerManagement->getListByMonth(
+            $request->year,
+            $request->month,
+            $request->room,
+            Auth::user()
+        )]);
+    }
+
     public function role(Request $request)
     {
         return response()->json(['role' => Gate::Allows('manager'),
