@@ -38,7 +38,11 @@
         </table>
         <div id="overlay" v-show="showContent">
             <div id="content">
-                <p v-if="error_flg == true" class="error">{{error_message}}</p>
+                <p v-if="error_flg == true" class="error">
+                    <ul>
+                        <li v-for="error in errors">{{ error }}</li>
+                    </ul>
+                </p>
                 <table class="edit">
                     <tbody>
                         <tr>
@@ -109,7 +113,6 @@
         data() {
             return {
                 role: false,
-                error_message: "",
                 error_flg:false,
                 errors: {},
                 selectYear: 2019,
@@ -198,6 +201,35 @@
                     console.log("失敗しました");
                 });
             },
+            validate: function(){
+                var ret = true;
+                this.errors = [];
+                if(this.contents.id == 0) {
+                    this.errors.push("ユーザーが選択されていません");
+                    ret = false;
+                }
+                if(this.contents.num == 0) {
+                    this.errors.push("人数が選択されていません");
+                    ret = false;
+                }
+                if(this.contents.roomid == 0) {
+                    this.errors.push("部屋が選択されていません");
+                    ret = false;
+                }
+                if(this.contents.days == 0) {
+                    this.errors.push("宿泊日数が入力されていません");
+                    ret = false;
+                }
+                if(this.contents.start_day == "") {
+                    this.errors.push("宿泊日が入力されていません");
+                    ret = false;
+                }
+                if(this.contents.checkout == "") {
+                    this.errors.push("チェックアウト時刻が入力されていません");
+                    ret = false;
+                }
+                return ret;
+            },
             onClickEdit: function(){
                 this.edit_flg = true;
                 var checkoutTime = this.contents.checkout.split(" ")[1];
@@ -208,6 +240,10 @@
                 });
             },
             onClickSave: function(){
+                if(this.validate() == false){
+                    this.error_flg = true;
+                    return;
+                }
                 var self = this;
                 this.param.year = this.selectYear;
                 this.param.month = this.selectMonth;

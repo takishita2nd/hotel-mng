@@ -1,6 +1,10 @@
 <template>
     <div>
-        <p v-if="error_flg == true" class="error">{{error_message}}</p>
+        <p v-if="error_flg == true" class="error">
+            <ul>
+                <li v-for="error in errors">{{ error }}</li>
+            </ul>
+        </p>
         <table class="edit">
             <tbody>
                 <tr>
@@ -57,9 +61,9 @@
                     <p>名前<input type="text" v-model=param.search /></p>
                     <tbody>
                         <tr>
-                            <th>名前</th>
-                            <th>住所</th>
-                            <th>電話番号</th>
+                            <th class="name">名前</th>
+                            <th class="address">住所</th>
+                            <th class="phone">電話番号</th>
                         </tr>
                         <tr v-for="user in users" @click="selectUser(user)">
                             <td class="name">{{ user.name }}</td>
@@ -82,9 +86,8 @@
         data() {
             return {
                 role: false,
-                error_message: "",
+                errors: [],
                 error_flg:false,
-                errors: {},
                 nums: [
                     {text:'1', value:1},
                     {text:'2', value:2}
@@ -148,7 +151,40 @@
                 this.contents.phone = user.phone;
                 this.closeModal();
             },
+            validate: function(){
+                var ret = true;
+                this.errors = [];
+                if(this.contents.id == 0) {
+                    this.errors.push("ユーザーが選択されていません");
+                    ret = false;
+                }
+                if(this.contents.num == 0) {
+                    this.errors.push("人数が選択されていません");
+                    ret = false;
+                }
+                if(this.contents.roomid == 0) {
+                    this.errors.push("部屋が選択されていません");
+                    ret = false;
+                }
+                if(this.contents.days == 0) {
+                    this.errors.push("宿泊日数が入力されていません");
+                    ret = false;
+                }
+                if(this.contents.start_day == "") {
+                    this.errors.push("宿泊日が入力されていません");
+                    ret = false;
+                }
+                if(this.contents.checkout == "") {
+                    this.errors.push("チェックアウト時刻が入力されていません");
+                    ret = false;
+                }
+                return ret;
+            },
             regist: function() {
+                if(this.validate() == false){
+                    this.error_flg = true;
+                    return;
+                }
                 var self = this;
                 this.param.contents = this.contents;
                 axios.post('/api/add', this.param).then(function(response){
