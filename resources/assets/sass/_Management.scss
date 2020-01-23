@@ -112,7 +112,7 @@ table.schedule{
     }
 }
 table.total{
-    width: 50%;
+    width: 100%;
     tbody tr{
         th {
             border: solid;
@@ -190,8 +190,39 @@ table.checkout{
     
     #content{
         z-index:2;
-        width:50%;
+        width:70%;
         padding: 1em;
         background:#fff;
+        table.usersearch {
+            width: 100%;
+            tbody tr{
+                th {
+                    border: solid;
+                    border-width: thin;
+                }
+                .name {
+                    width: 10%;
+                }
+                .address {
+                    width: 10%;
+                }
+                .phone {
+                    width: 10%;
+                }
+                td {
+                    border: solid;
+                    border-width: thin;
+                }
+                .name {
+                    width: 10%;
+                }
+                .address {
+                    width: 10%;
+                }
+                .phone {
+                    width: 10%;
+                }
+            }
+        }
     }
 }

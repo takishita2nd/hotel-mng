@@ -57,8 +57,8 @@
         <p><button @click="regist">登録</button></p>
         <div id="overlay" v-show="showContent">
             <div id="content">
-                <table class="edit">
-                    <p>名前<input type="text" v-model=param.search /></p>
+                <p>名前<input type="text" v-model=param.search /></p>
+                <table class="usersearch">
                     <tbody>
                         <tr>
                             <th class="name">名前</th>

@@ -8474,7 +8474,7 @@ table.schedule tbody tr .lodging {
 }
 
 table.total {
-  width: 50%;
+  width: 100%;
 }
 
 table.total tbody tr th {
@@ -8571,9 +8571,47 @@ table.checkout tbody tr .time {
 
 #overlay #content {
   z-index: 2;
-  width: 50%;
+  width: 70%;
   padding: 1em;
   background: #fff;
+}
+
+#overlay #content table.usersearch {
+  width: 100%;
+}
+
+#overlay #content table.usersearch tbody tr th {
+  border: solid;
+  border-width: thin;
+}
+
+#overlay #content table.usersearch tbody tr .name {
+  width: 10%;
+}
+
+#overlay #content table.usersearch tbody tr .address {
+  width: 10%;
+}
+
+#overlay #content table.usersearch tbody tr .phone {
+  width: 10%;
+}
+
+#overlay #content table.usersearch tbody tr td {
+  border: solid;
+  border-width: thin;
+}
+
+#overlay #content table.usersearch tbody tr .name {
+  width: 10%;
+}
+
+#overlay #content table.usersearch tbody tr .address {
+  width: 10%;
+}
+
+#overlay #content table.usersearch tbody tr .phone {
+  width: 10%;
 }
 
 table.room {
