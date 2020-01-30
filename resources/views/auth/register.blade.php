@@ -81,6 +81,71 @@
                             </div>
                         </div>
 
+                        <div class="form-group{{ $errors->has('credit') ? ' has-error' : '' }}">
+                            <label for="credit" class="col-md-4 control-label">credit number</label>
+
+                            <div class="col-md-6">
+                                <input id="credit" type="credit" class="form-control" name="credit" required>
+
+                                @if ($errors->has('credit'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('credit') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="mmyy" class="col-md-4 control-label">MM / YY</label>
+
+                            <div class="col-md-6">
+                            <select name="mm">
+                                <option value="1">01</option>
+                                <option value="2">02</option>
+                                <option value="3">03</option>
+                                <option value="4">04</option>
+                                <option value="5">05</option>
+                                <option value="6">06</option>
+                                <option value="7">07</option>
+                                <option value="8">08</option>
+                                <option value="9">09</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                            </select>
+                            /
+                            {{Form::selectYear('yy', 2020, 2030)}}
+                            </div>
+                        </div>
+
+                        <div class="form-group{{ $errors->has('credit_name') ? ' has-error' : '' }}">
+                            <label for="credit_name" class="col-md-4 control-label">credit name</label>
+
+                            <div class="col-md-6">
+                                <input id="credit_name" type="credit_name" class="form-control" name="credit_name" required>
+
+                                @if ($errors->has('credit_name'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('credit_name') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group{{ $errors->has('code') ? ' has-error' : '' }}">
+                            <label for="code" class="col-md-4 control-label">security code</label>
+
+                            <div class="col-md-6">
+                                <input id="code" type="code" class="form-control" name="code" required>
+
+                                @if ($errors->has('code'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('code') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
                         <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
                             <label for="password" class="col-md-4 control-label">Password</label>
 
