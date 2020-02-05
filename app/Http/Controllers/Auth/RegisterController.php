@@ -77,11 +77,11 @@ class RegisterController extends Controller
             'phone' => $data['phone'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
-            'credit_number' => bcrypt($data['credit']),
+            'credit_number' => encrypt($data['credit']),
             'mm' => $data['mm'],
             'yy' => $data['yy'],
-            'credit_name' => bcrypt($data['credit_name']),
-            'code' => bcrypt($data['code'])
+            'credit_name' => encrypt($data['credit_name']),
+            'code' => encrypt($data['code'])
         ]);
     }
 }
