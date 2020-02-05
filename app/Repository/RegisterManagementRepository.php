@@ -87,6 +87,7 @@ class RegisterManagementRepository
         {
             $model->$name = $param[$name];
         }
+        $model->lock_number = $this->generateLockNumber();
         $model->save();
         $this->attachToRoom($model, $room);
         $this->attachToSchedule($model);
@@ -367,5 +368,10 @@ class RegisterManagementRepository
     public function getParam()
     {
         return $this->paramNames;
+    }
+
+    public function generateLockNumber()
+    {
+        return rand(0,9).rand(0,9).rand(0,9).rand(0,9);
     }
 }
