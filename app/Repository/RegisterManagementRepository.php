@@ -9,6 +9,7 @@ use App\Model\ReserveManagement;
 use App\Model\ReserveDayList;
 use App\Model\Room;
 use App\User;
+use QrCode;
 
 class RegisterManagementRepository
 {
@@ -88,6 +89,8 @@ class RegisterManagementRepository
             $model->$name = $param[$name];
         }
         $model->lock_number = $this->generateLockNumber();
+        $src = base64_encode(QrCode::format('png')->size(100)->generate($model->lock_number));
+        Log::debug(print_r($src ,true));
         $model->save();
         $this->attachToRoom($model, $room);
         $this->attachToSchedule($model);
@@ -231,24 +234,16 @@ class RegisterManagementRepository
      */
     public function checkScheduleForUpdate($date, $num, $userId, $room)
     {
-        Log::debug(print_r($date ,true));
-        Log::debug(print_r($num ,true));
-        Log::debug(print_r($userId ,true));
-        Log::debug(print_r($room ,true));
         for($i = 0; $i < $num; $i++)
         {
             $model2s = ReserveDayList::where(['day' => date('Y-m-d', strtotime($date.'+'.$i.' day'))])->get();
             if(is_null($model2s) == false)
             {
                 foreach ($model2s as $model2) {
-                    Log::debug(print_r($model2->id ,true));
-                    Log::debug(print_r($model2->day ,true));
                     if(is_null($model2->reserveManagements()->first()->rooms()->first()) == false)
                     {
                         if($model2->reserveManagements()->first()->rooms()->first()->id == $room)
                         {
-                            Log::debug(print_r($model2->reserveManagements()->first()->rooms()->first()->id ,true));
-                            Log::debug(print_r($model2->reserveManagements()->first()->rooms()->first()->name ,true));
                             if($model2->reserveManagements()->first()->id != $userId)
                             {
                                 return false;
