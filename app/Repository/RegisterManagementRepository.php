@@ -5,10 +5,12 @@ namespace App\Repository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Gate;
+use App\Mail\SendQRcodeMail;
 use App\Model\ReserveManagement;
 use App\Model\ReserveDayList;
 use App\Model\Room;
 use App\User;
+use Mail;
 use QrCode;
 
 class RegisterManagementRepository
@@ -89,12 +91,20 @@ class RegisterManagementRepository
             $model->$name = $param[$name];
         }
         $model->lock_number = $this->generateLockNumber();
-        $src = base64_encode(QrCode::format('png')->size(100)->generate($model->lock_number));
-        Log::debug(print_r($src ,true));
+        QrCode::format('png')->size(100)->generate($model->lock_number, public_path('/img/qr.png'));
         $model->save();
         $this->attachToRoom($model, $room);
         $this->attachToSchedule($model);
         $this->attachToUser($model, $user);
+
+        $to = [
+            [
+                'email' => $user->email, 
+                'name' => $user->fullname,
+            ]
+        ];
+        Mail::to($to)->send(new SendQRcodeMail('/var/www/html/hotel-mng/public/img/qr.png'));
+
     }
 
     /**
