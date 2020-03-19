@@ -200,11 +200,11 @@ class RegisterManagementRepository
     /**
      * 日付から予約を１件取得する
      * 
-     * @return ReserveDayList
+     * @return ReserveManagement
      */
-    public function getItemByDate($date)
+    public function getItemsByDate($date)
     {
-        return ReserveDayList::where(['day' => $date])->first();
+        return ReserveManagement::where(['start_day' => $date])->get();
     }
 
     /**
